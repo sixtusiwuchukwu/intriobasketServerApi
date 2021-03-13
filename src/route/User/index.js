@@ -7,17 +7,17 @@ const User = require("../../models/user");
 const UserController = require("../../controller/User");
 
 router.post("/signup", async (req, res) => {
-  const { username, gmail, password } = req.body;
+  const { username, email, password } = req.body;
 
-  let result = await new UserController().userSignup(username, gmail, password);
+  let result = await new UserController().userSignup(username, email, password);
 
   res.send(result);
 });
 
 router.post("/login", async (req, res) => {
-  const { gmail, password } = req.body;
+  const { email, password } = req.body;
 
-  let result = await new UserController().userLogin(gmail, password);
+  let result = await new UserController().userLogin(email, password);
 
   res.send(result);
 });
