@@ -27,10 +27,10 @@ module.exports = class UserController {
     if (!isPassword) {
       return " incorrect user password";
     }
-    let { gmail: userGmail, username } = founduser;
+    let { gmail: userGmail, username, isAdmin } = founduser;
     return {
       token: await GenerateToken(founduser),
-      user: { userGmail, username },
+      user: { userGmail, username, isAdmin },
     };
   }
   async forgetpassword() {}
