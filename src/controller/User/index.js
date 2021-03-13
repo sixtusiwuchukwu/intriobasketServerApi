@@ -7,17 +7,17 @@ const bcrypt = require("bcrypt");
 const GenerateToken = require("../../utils/generateToken");
 
 module.exports = class UserController {
-  async userSignup(username, gmail, password) {
-    let alreadyUser = await __UserModel.findOne({ gmail });
+  async userSignup(username, email, password) {
+    let alreadyUser = await __UserModel.findOne({ email });
     if (!alreadyUser) {
-      await __UserModel.create({ gmail, username, password });
+      await __UserModel.create({ email, username, password });
       return "user Account created sucessfully";
     }
-    return `user with this gmail ${gmail} already Exit`;
+    return `user with this gmail ${email} already Exit`;
   }
 
-  async userLogin(gmail, password) {
-    let founduser = await __UserModel.findOne({ gmail });
+  async userLogin(email, password) {
+    let founduser = await __UserModel.findOne({ email });
     if (!founduser) {
       return "user not found";
     }
@@ -27,10 +27,10 @@ module.exports = class UserController {
     if (!isPassword) {
       return " incorrect user password";
     }
-    let { gmail: userGmail, username, isAdmin } = founduser;
+    let { email: userEmail, username, isAdmin } = founduser;
     return {
       token: await GenerateToken(founduser),
-      user: { userGmail, username, isAdmin },
+      user: { userEmail, username, isAdmin },
     };
   }
   async forgetpassword() {}
