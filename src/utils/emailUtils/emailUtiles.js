@@ -38,7 +38,7 @@ class EmailUtils {
       },
       function (error, info) {
         if (error) {
-          console.log(error, "from here");
+          console.log(error, "from email");
           return;
         }
 

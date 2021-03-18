@@ -23,6 +23,11 @@ const userSchema = new mongoose.Schema(
     resetPasswordCode: {
       type: Number,
     },
+    avater: {
+      type: String,
+      default:
+        "https://res.cloudinary.com/defbw7rt6/image/upload/v1616062085/shopwitbee-defaultProfileImge.jpg",
+    },
     isAdmin: {
       type: Boolean,
       default: false,
