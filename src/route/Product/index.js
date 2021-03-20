@@ -102,5 +102,6 @@ router.get("/category/:categoryname", async (req, res) => {
   return res.send(result);
 });
 router.get("/category/:collectionname", async (req, res) => {});
+router.get("/category/:collectionnames", async (req, res) => {});
 
 module.exports = router;
