@@ -391,7 +391,7 @@ module.exports = function emailTemplate(
                                                   <td style="padding-right: 0px;padding-left: 0px;" align="center">
                                           <![endif]-->
 
-                                          <img src="https://i.ibb.co/b5htVZD/shopwitbee-LOGO.jpg" alt="shopwitbee-LOGO" border="0" width="100%" />
+                                          <img src="https://i.ibb.co/b5htVZD/shopwitbee-LOGO.jpg" alt="intriobasket-LOGO" border="0" width="100%" />
 
                             <!--[if mso]></td></tr></table><![endif]-->
                           </div>
@@ -610,8 +610,10 @@ module.exports = function emailTemplate(
                             "
                           >
 
-
-                               <p style="
+${
+  verify_text ? (`
+    <p
+      style="
                                 -webkit-text-size-adjust: none;
                                 text-decoration: none;
                                 display: inline-block;
@@ -634,18 +636,25 @@ module.exports = function emailTemplate(
                                 mso-border-alt: none;
                                 word-break: keep-all;
                               "
-                              target="_blank"
-                              ><span
-                                style="
+      target="_blank"
+    >
+      <span
+        style="
                                   padding-left: 20px;
                                   padding-right: 20px;
                                   font-size: 12px;
                                   display: inline-block;
                                 "
-                              >
-                                <span style="font-size: 20px; line-height: 24px;color:white!important"
-                                  >${verify_text}</span>
-                              </span></p>
+      >
+        <span style="font-size: 20px; line-height: 24px;color:white!important">
+          ${verify_text}
+        </span>
+      </span>
+    </p>`
+  ) : (
+    ""
+  )
+}
 
 
 
@@ -843,7 +852,7 @@ module.exports = function emailTemplate(
                                   ><strong
                                     ><span
                                       style="font-size: 14px; line-height: 25px;"
-                                      >Shopwitbee</span
+                                      >Intriobasket</span
                                     ></strong
                                   ></em
                                 >
@@ -1309,7 +1318,7 @@ module.exports = function emailTemplate(
                                 "
                               >
                                 <span style="font-size: 14px; line-height: 16px;"
-                                  ><strong>info@shopwitbee.com</strong></span
+                                  ><strong>info@intriobasket.com</strong></span
                                 >
                               </p>
                             </div>

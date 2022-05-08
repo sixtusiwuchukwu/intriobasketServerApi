@@ -11,43 +11,55 @@ const GenerateCode = require("../../utils/generateVerificationCode");
 const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class UserController {
-  async userSignup(username, email, password) {
+  async userSignup(fullName, email, password,gender,phoneNumber) {
     try {
       let alreadyUser = await __UserModel.findOne({ email });
       if (!alreadyUser) {
-        await __UserModel.create({ email, username, password });
+        await __UserModel.create({fullName, email, password,gender,phoneNumber });
+
+        await new EmailUtils("Email Service").mailSend(
+          "Welcome",
+          {
+            fullName: fullName,
+            message: `Welcome to IntrioBasket shopping store , where customer satisfacton is our priority`,
+          },
+          email,
+          "WELCOME",
+          process.env.MAIL_EMAIL
+        );
         return "user Account created sucessfully";
       }
-      return `user with this gmail ${email} already Exist`;
+      return `user with this email ${email} already Exist`;
     } catch (error) {
       return error.message;
     }
   }
 
   async userLogin(email, password) {
-    let founduser = await __UserModel.findOne({ email });
+    let founduser = await __UserModel.findOne({ email })
     if (!founduser) {
       return "user not found";
     }
+    let data = {...founduser._doc,password:undefined}
 
     const isPassword = await bcrypt.compare(password, founduser.password);
 
     if (!isPassword) {
       return " incorrect user password";
     }
-    let { email: userEmail, username, isAdmin } = founduser;
+
     return {
       token: await GenerateToken(founduser),
-      user: { userEmail, username, isAdmin },
+      user:data,
     };
   }
   async forgetpassword(email, req) {
     let founduser = await __UserModel.findOne({ email });
 
     if (!founduser) {
-      return "Email address does not exist with shopwitbee";
+      return "Email address does not exist with Intriobasket";
     }
-    const code = await GenerateCode(); /*Generate verification code*/
+    const code =  GenerateCode(); /*Generate verification code*/
     await __UserModel.findOneAndUpdate(
       /*storing verificationCode to user account for validation */
       { email },
@@ -62,7 +74,7 @@ module.exports = class UserController {
       {
         fullName: founduser.username,
         message: "Welcome. Your password reset code is below.",
-        verificationLink: `${req.headers.origin}/verify?=${code}`,
+        verificationLink: `${req.headers.origin}/verify.html?=${code}`,
         actionText: code,
       },
       founduser.email,
@@ -79,7 +91,6 @@ module.exports = class UserController {
   // verify code sent to user email for forget password flow.
   async verifyforgetpasswordcode(req, code) {
     if (!req.user) {
-      console.log("please log in to continue");
       return "please log in to continue";
     }
     const { _id } = req.user;
@@ -101,7 +112,6 @@ module.exports = class UserController {
 
   async resendPasswordResetcode(req) {
     if (!req.user) {
-      console.log("please log in to continue");
       return "please log in to continue";
     }
     const { _id } = req.user;
@@ -116,12 +126,12 @@ module.exports = class UserController {
     await new EmailUtils("Email Service").mailSend(
       "forgotPassword",
       {
-        fullName: founduser.username,
+        fullName: foundUser.username,
         message: "Welcome. Your password reset code is below.",
-        verificationLink: `${req.headers.origin}/verify?=${code}`,
-        actionText: code,
+        verificationLink: `${req.headers.origin}/verify.html?=${code}`,
+        // actionText: code,
       },
-      founduser.email,
+      foundUser.email,
       "FORGOT PASSWORD",
       process.env.MAIL_EMAIL
     );
@@ -129,13 +139,12 @@ module.exports = class UserController {
     return {
       message:
         "An email with your reset password code has been sent to your email",
-      token: await GenerateToken(founduser),
+      token: await GenerateToken(foundUser),
     };
   }
   // user set new password when forgotten password
   async resetPassword(req, newPassword) {
     if (!req.user) {
-      console.log("please log in to continue");
       return "please log in to continue";
     }
     const { _id } = req.user;
@@ -149,10 +158,9 @@ module.exports = class UserController {
     return "sucessfully changed password";
   }
 
-  async updateUserProfile(req, username, email) {
+  async updateUserProfile(req,data) {
     try {
       if (!req.user) {
-        console.log("please log in to continue");
         return "please log in to continue";
       }
       const { _id } = req.user;
@@ -165,7 +173,7 @@ module.exports = class UserController {
 
       await __UserModel.findOneAndUpdate(
         { _id },
-        { username, email },
+        {...data},
         { new: true }
       );
       return "user Account updated sucessfully";
@@ -177,7 +185,6 @@ module.exports = class UserController {
   async updateUserprofileImage(req, image) {
     try {
       if (!req.user) {
-        console.log("please log in to continue");
         return "please log in to continue";
       }
       const { _id } = req.user;
@@ -200,7 +207,7 @@ module.exports = class UserController {
           crop: "scale",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "bmp"],
           public_id: "",
-          folder: "shopwitbee-userProfile",
+          folder: "intriobasket-userProfile",
         },
         async function (error, result) {
           if (error) {
@@ -224,7 +231,6 @@ module.exports = class UserController {
   async updateUserPassword(req, oldPassword, newPassword) {
     try {
       if (!req.user) {
-        console.log("please log in to continue");
         return "please log in to continue";
       }
       const { _id } = req.user;

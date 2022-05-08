@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 
 const userSchema = new mongoose.Schema(
   {
-    username: {
+    fullName: {
       type: String,
       required: true,
       trim: true,
@@ -15,11 +15,15 @@ const userSchema = new mongoose.Schema(
       trim: true,
       minlength: 4,
       unique: true,
+      index: true,
     },
     password: {
       type: String,
       required: true,
     },
+    phone: { type: String },
+    gender: { type: String, enum: ["Male", "Female"] },
+
     resetPasswordCode: {
       type: Number,
     },
@@ -27,6 +31,10 @@ const userSchema = new mongoose.Schema(
       type: String,
       default:
         "https://res.cloudinary.com/defbw7rt6/image/upload/v1616062085/shopwitbee-defaultProfileImge.jpg",
+    },
+    billingAddress: {
+      state: { type: String, trim: true },
+      address: { type: String, trim: true },
     },
     isAdmin: {
       type: Boolean,

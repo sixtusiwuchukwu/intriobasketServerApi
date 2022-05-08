@@ -5,9 +5,9 @@ const isAuth = require("../../utils/auth/isAuth");
 const UserController = require("../../controller/User");
 
 router.post("/signup", async (req, res) => {
-  const { username, email, password } = req.body;
+  const {fullName, email, password,gender,phoneNumber} = req.body;
 
-  let result = await new UserController().userSignup(username, email, password);
+  let result = await new UserController().userSignup(fullName, email, password,gender,phoneNumber);
 
   res.send(result);
 });

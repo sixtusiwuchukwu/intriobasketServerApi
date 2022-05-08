@@ -1,5 +1,7 @@
 const nodeMailer = require("nodemailer");
 const EmailTemplate = require("../emailTemplete/email");
+const smtpTransport = require("nodemailer-smtp-transport");
+
 
 // const { SendInvoice } = require("../../invoiceTemplate/createInvoice");
 class EmailUtils {
@@ -14,24 +16,28 @@ class EmailUtils {
   }
 
   async mailer(emails, message, subject, from) {
-    let transporter = nodeMailer.createTransport({
-      service: "gmail",
-      port: 465,
-      secure: true,
-      host: "smtp.gmail.com",
+    let transporter = nodeMailer.createTransport(
+      smtpTransport({
+        host: "server187.web-hosting.com",
+        secureConnection: true,
+        tls: {
+          rejectUnauthorized: false,
+        },
+  
+        port: 587,
       // process.env.MAIL_EMAIL
       auth: {
-        user: "sixtusiwuchukwu21@gmail.com", // generated ethereal users
+        user: process.env.MAIL_EMAIL, // generated ethereal users
 
-        pass: "@sixtus4545", // generated ethereal password
+        pass: process.env.MAIL_PASSWORD, // generated ethereal password
       },
       tls: { rejectUnauthorized: false },
-    });
+  }))
 
     // send mail with defined transport object
-    let info = await transporter.sendMail(
+     transporter.sendMail(
       {
-        from: `Shopwitbee <${from}>`, // sender address
+        from: `IntrioBasket <${from}>`, // sender address
         bcc: `${emails}`, // list of receivers
         subject: subject, // Subject line
         html: message, // html body
@@ -56,18 +62,17 @@ class EmailUtils {
     // create reusable transporter object using the default SMTP transport
     let transporter = nodeMailer.createTransport({
       host: "smtp.ethereal.email",
-      port: 587,
-      secure: false, // true for 465, false for other ports
+      port: 587, // true for 465, false for other ports
       auth: {
-        user: testAccount.user, // generated ethereal user
-        pass: testAccount.pass, // generated ethereal password
+        user: "kjbutbwleeog7qoj@ethereal.email", // generated ethereal user
+        pass: "Fa15hbVyuxW1mPXnkP", // generated ethereal password
       },
     });
 
     // send mail with defined transport object
-    let info = await transporter.sendMail({
-      from: '"Account Activation " <info@mgoldservices.com>', // sender address
-      to: from ? "iinfo@mgoldservices.com" : emails, // list of receivers
+    await transporter.sendMail({
+      from: '"welcome " <info@mgoldservices.com>', // sender address
+      to: from, // list of receivers
       subject: subject, // Subject line
       html: message, // html body
     });
@@ -85,6 +90,7 @@ class EmailUtils {
       "accountActivation",
       "accountDeactivation",
       "PaymentInvoice",
+      "Welcome",
     ];
     if (!acceptedType.includes(template))
       throw new Error(
@@ -104,6 +110,7 @@ class EmailUtils {
     let { fullName, message, verificationLink, actionText } = result;
 
     message = EmailTemplate(fullName, message, verificationLink, actionText);
+    // await this.mailer(emails, message, subject, from);
     await this.mailer(emails, message, subject, from);
   }
 }

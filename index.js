@@ -1,33 +1,17 @@
 require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
-const bodyParser = require("body-parser");
 const userApi = require("./src/route/User");
 const productApi = require("./src/route/Product/");
+const CheckoutApi = require("./src/route/Checkout");
 const cors = require("cors");
 
 const app = express();
 
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.urlencoded({ extended: true }));
 
-app.use(bodyParser.json());
+app.use(express.json());
 
-// app.use((req, res, next) => {
-//   res.header("Access-Control-Allow-Origin", "*");
-//   res.header(
-//     "Access-Control-Allow-Headers",
-//     "Origin, X-Requested-with, Content-Type,Accept, Authorization"
-//   );
-
-//   if (req.method === "OPTIONS") {
-//     res.header(
-//       "Access-Control-Allow-Methods",
-//       "PUT,POST,GET,DELETE,PATCH,UPDATE"
-//     );
-//     return res.status(200).json({});
-//   }
-//   next();
-// });
 
 const corsOptions = {
   Origin: "http://localhost:3000/",
@@ -39,16 +23,14 @@ app.use(cors(corsOptions));
 app.use("/user", userApi);
 
 app.use("/product", productApi);
+// app.use("/checkout", CheckoutApi);
+mongoose.set('useCreateIndex', true);
 
 mongoose
-  // .connect(
-  //   "mongodb+srv://sixtus4545:@sixtus4545@sixtusdb-cqswn.mongodb.net/test?retryWrites=true&w=majority",
-  //   { useNewUrlParser: true }
-  // )
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: false,
+    useFindAndModify: true,
   })
   .then(() => {
     setTimeout(() => {
@@ -63,10 +45,11 @@ mongoose
     console.log("...connecting to database");
   });
 
-// mongoose.Promise = global.Promise;
 
-const PORT = process.env.PORT;
+
+
+const PORT = process.env.PORT || 2090;
 
 app.listen(PORT, () => {
-  console.log(`shopwitbee server is connected on port ${PORT}`);
+  console.log(`Intriobasket server is connected on port ${PORT}`);
 });

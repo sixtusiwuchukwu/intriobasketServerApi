@@ -14,31 +14,22 @@ router.post("/create", isAuth, async (req, res) => {
     return res.send("please log in to continue");
   }
   const {
-    productimage,
-    productname,
-    catergory,
-    collection,
-    price,
+    category,
     description,
+    cost,
+    productImage,
+    productName
   } = req.body;
-  if (
-    !productimage |
-    !productname |
-    !catergory |
-    !collection |
-    !price |
-    !description
-  ) {
+  if ( !productImage | !productName |  !category |  !cost | !description ) {
     return res.send(
       "productimage,productname,catergory,collection,price,description must be provided"
     );
   }
   let result = await new ProductController().createProduct(
-    productimage,
-    productname,
-    catergory,
-    collection,
-    price,
+    productImage,
+    productName,
+    category,
+    cost,
     description
   );
   return res.send(result);
@@ -67,12 +58,12 @@ router.post("/createcategory", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
   }
-  const { categoryname } = req.body;
-  if (!categoryname | (categoryname === "")) {
+  const { categoryName } = req.body;
+  if (!categoryName | (categoryName === "")) {
     return res.send("category Name must be provided");
   }
 
-  let result = await new ProductController().createCategory(categoryname);
+  let result = await new ProductController().createCategory(categoryName);
 
   return res.send(result);
 });
@@ -101,7 +92,6 @@ router.get("/category/:categoryname", async (req, res) => {
 
   return res.send(result);
 });
-router.get("/category/:collectionname", async (req, res) => {});
-router.get("/category/:collectionnames", async (req, res) => {});
+
 
 module.exports = router;
