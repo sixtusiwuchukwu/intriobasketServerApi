@@ -5,9 +5,9 @@ const isAuth = require("../../utils/auth/isAuth");
 const UserController = require("../../controller/User");
 
 router.post("/signup", async (req, res) => {
-  const {fullName, email, password,gender,phoneNumber} = req.body;
+  const {fullName, email, password,gender,phone,referal} = req.body;
 
-  let result = await new UserController().userSignup(fullName, email, password,gender,phoneNumber);
+  let result = await new UserController().userSignup(req,fullName, email, password,gender,phone,referal);
 
   res.send(result);
 });
@@ -15,7 +15,7 @@ router.post("/signup", async (req, res) => {
 router.post("/login", async (req, res) => {
   const { email, password } = req.body;
   if (!email | !password) {
-    return res.send("email and password was not provided");
+    return res.status("email and password was not provided");
   }
 
   let result = await new UserController().userLogin(email, password);
@@ -57,7 +57,7 @@ router.post("/resetpassword", isAuth, async (req, res) => {
   return res.send(result);
 });
 
-router.post("/updateuserprofileimage", isAuth, async (req, res) => {
+router.put("/updateuserprofileimage", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
   }
@@ -90,22 +90,34 @@ router.post("/updateUserPassword", isAuth, async (req, res) => {
 
   return res.send(result);
 });
-router.post("/updateUserProfile", isAuth, async (req, res) => {
+router.put("/updateUserProfile", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
   }
-  const { username, email } = req.body;
-  if (!username | !email) {
-    return res.send("username and email not provided");
-  }
+
 
   const result = await new UserController().updateUserProfile(
     req,
-    username,
-    email
   );
 
   return res.send(result);
 });
+router.put("/updateUserAddress", isAuth, async (req, res) => {
+  if (!req.user) {
+    return res.send("please log in to continue");
+  }
+
+
+  const result = await new UserController().updateUserAddress(
+    req,
+  );
+
+  return res.send(result);
+});
+
+router.post("/verifyuser",async(req,res)=>{
+  let result = await new UserController().verifyUser(req.query.code,req.query.id)
+res.send(result)
+})
 
 module.exports = router;

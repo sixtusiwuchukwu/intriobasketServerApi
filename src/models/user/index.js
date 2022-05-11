@@ -27,16 +27,31 @@ const userSchema = new mongoose.Schema(
     resetPasswordCode: {
       type: Number,
     },
+    verificationCode: {
+      type: Number,
+    },
     avater: {
       type: String,
       default:
         "https://res.cloudinary.com/defbw7rt6/image/upload/v1616062085/shopwitbee-defaultProfileImge.jpg",
     },
+    referalCode: {
+      type: String,
+      unique: true,
+      index: true,
+    },
+    referals: [
+      {
+        type: mongoose.Types.ObjectId,
+        ref: "user",
+      }
+    ],
+
     billingAddress: {
       state: { type: String, trim: true },
       address: { type: String, trim: true },
     },
-    isAdmin: {
+    isVerified: {
       type: Boolean,
       default: false,
     },

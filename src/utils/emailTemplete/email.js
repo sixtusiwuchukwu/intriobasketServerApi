@@ -612,7 +612,8 @@ module.exports = function emailTemplate(
 
 ${
   verify_text ? (`
-    <p
+    <a  target="_blank"
+    href='${verify_link ? verify_link : "#"}'
       style="
                                 -webkit-text-size-adjust: none;
                                 text-decoration: none;
@@ -636,7 +637,7 @@ ${
                                 mso-border-alt: none;
                                 word-break: keep-all;
                               "
-      target="_blank"
+     
     >
       <span
         style="
@@ -650,7 +651,7 @@ ${
           ${verify_text}
         </span>
       </span>
-    </p>`
+    </a>`
   ) : (
     ""
   )

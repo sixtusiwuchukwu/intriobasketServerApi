@@ -10,11 +10,12 @@ const app = express();
 
 app.use(express.urlencoded({ extended: true }));
 
-app.use(express.json());
+app.use(express.json({limit:"50mb"}));
 
 
 const corsOptions = {
-  Origin: "http://localhost:3000/",
+  // Origin: "http://localhost:3000/",
+  Origin: "http://localhost:5500/",
   // optionsSucessStatus: 200,
 };
 
@@ -30,7 +31,7 @@ mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
-    useFindAndModify: true,
+    useFindAndModify: false,
   })
   .then(() => {
     setTimeout(() => {

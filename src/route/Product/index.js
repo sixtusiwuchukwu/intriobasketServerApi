@@ -4,6 +4,7 @@ const router = express.Router();
 const isAuth = require("../../utils/auth/isAuth");
 
 const ProductController = require("../../controller/Product");
+const AdminContoller = require("../../controller/User/admin")
 
 router.get("/", async (req, res) => {
   let products = await new ProductController().products();
@@ -63,19 +64,11 @@ router.post("/createcategory", isAuth, async (req, res) => {
     return res.send("category Name must be provided");
   }
 
-  let result = await new ProductController().createCategory(categoryName);
+  let result = await new AdminContoller().createCategory(categoryName);
 
   return res.send(result);
 });
-router.post("/createcollection", isAuth, async (req, res) => {
-  if (!req.user) {
-    return res.send("please log in to continue");
-  }
-  const { collectionname } = req.body;
-  if (!collectionname | (collectionname === "")) {
-    return res.send("collection Name  must be provided");
-  }
-});
+
 router.get("/search/:product", async (req, res) => {
   const { product } = req.params;
   if (!product | (product === "")) {

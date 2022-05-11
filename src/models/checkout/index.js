@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-const checkoutSchema = new mongoose.schema(
+const checkoutSchema = new mongoose.Schema(
   {
     quantity: {
       type: Number,
@@ -12,6 +12,11 @@ const checkoutSchema = new mongoose.schema(
     },
     deliveryStatus: {
       type: String,
+      enum:["pending", "delivered","inTransit"],
+      default:"pending"
+    },
+    transactionRefId:{
+      type:String,
     },
     address: {
       state: { type: String },

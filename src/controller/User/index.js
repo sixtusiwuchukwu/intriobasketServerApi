@@ -9,19 +9,45 @@ const GenerateToken = require("../../utils/generateToken");
 const GenerateCode = require("../../utils/generateVerificationCode");
 
 const EmailUtils = require("../../utils/emailUtils/emailUtiles");
+var generateRefCode = require("shortid");
 
 module.exports = class UserController {
-  async userSignup(fullName, email, password,gender,phoneNumber) {
+  async userSignup(
+    req,
+    fullName,
+    email,
+    password,
+    gender,
+    phone,
+    referal = ""
+  ) {
     try {
       let alreadyUser = await __UserModel.findOne({ email });
+      let code = GenerateCode();
       if (!alreadyUser) {
-        await __UserModel.create({fullName, email, password,gender,phoneNumber });
-
+        console.log(generateRefCode());
+        let newUser = await __UserModel.create({
+          fullName,
+          email,
+          password,
+          gender,
+          phone,
+          verificationCode: code,
+          referalCode: generateRefCode(),
+        });
+        if (referal !== "") {
+          await __UserModel.findOneAndUpdate(
+            { referalCode: referal },
+            { $push: { referals: newUser._id } }
+          );
+        }
         await new EmailUtils("Email Service").mailSend(
           "Welcome",
           {
             fullName: fullName,
             message: `Welcome to IntrioBasket shopping store , where customer satisfacton is our priority`,
+            verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
+            actionText: "Click To Verify Account",
           },
           email,
           "WELCOME",
@@ -36,21 +62,21 @@ module.exports = class UserController {
   }
 
   async userLogin(email, password) {
-    let founduser = await __UserModel.findOne({ email })
+    let founduser = await __UserModel.findOne({ email });
     if (!founduser) {
       return "user not found";
     }
-    let data = {...founduser._doc,password:undefined}
+    let data = { ...founduser._doc, password: undefined };
 
     const isPassword = await bcrypt.compare(password, founduser.password);
 
     if (!isPassword) {
-      return " incorrect user password";
+      return "incorrect user password";
     }
 
     return {
       token: await GenerateToken(founduser),
-      user:data,
+      user: data,
     };
   }
   async forgetpassword(email, req) {
@@ -59,7 +85,7 @@ module.exports = class UserController {
     if (!founduser) {
       return "Email address does not exist with Intriobasket";
     }
-    const code =  GenerateCode(); /*Generate verification code*/
+    const code = GenerateCode(); /*Generate verification code*/
     await __UserModel.findOneAndUpdate(
       /*storing verificationCode to user account for validation */
       { email },
@@ -158,7 +184,62 @@ module.exports = class UserController {
     return "sucessfully changed password";
   }
 
-  async updateUserProfile(req,data) {
+  async updateUserProfile(req) {
+    try {
+      if (!req.user) {
+        return "please log in to continue";
+      }
+      const { _id } = req.user;
+      let avater = null;
+
+      let foundUser = await __UserModel.findById(_id);
+
+      if (!foundUser) {
+        return "user not found";
+      }
+      if (req.body.avater) {
+        cloudinary.config({
+          cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+          api_key: process.env.CLOUDINARY_API_KEY,
+          api_secret: process.env.CLOUDINARY_API_SECRET,
+        });
+        await cloudinary.uploader.upload(
+          req.body.avater,
+          {
+            width: 512,
+            height: 512,
+            crop: "scale",
+            allowed_formats: ["jpg", "png", "jpeg", "svg", "bmp"],
+            public_id: "",
+            folder: "intriobasket-userProfile",
+          },
+          async function (error, result) {
+            if (error) {
+              console.log(error)
+              return error.message;
+            }
+            avater = result.secure_url;
+          }
+        );
+      }
+
+      let newDetails = await __UserModel.findOneAndUpdate(
+        { _id },
+        {
+          avater: avater || foundUser.avater,
+          email: req.body.email || foundUser.email,
+          fullName: req.body.fullName || foundUser.fullName,
+          phone: req.body.phone || foundUser.phone,
+        },
+        { new: true }
+      );
+      return newDetails;
+    } catch (error) {
+      return error.message;
+      console.log(error);
+    }
+  }
+  async updateUserAddress(req) {
     try {
       if (!req.user) {
         return "please log in to continue";
@@ -171,12 +252,14 @@ module.exports = class UserController {
         return "user not found";
       }
 
-      await __UserModel.findOneAndUpdate(
+      let newDetails = await __UserModel.findOneAndUpdate(
         { _id },
-        {...data},
+        {
+          billingAddress: { state: req.body.state, address: req.body.address },
+        },
         { new: true }
       );
-      return "user Account updated sucessfully";
+      return newDetails;
     } catch (error) {
       return error.message;
     }
@@ -199,29 +282,7 @@ module.exports = class UserController {
         api_secret: process.env.CLOUDINARY_API_SECRET,
       });
 
-      await cloudinary.uploader.upload(
-        image,
-        {
-          width: 512,
-          height: 512,
-          crop: "scale",
-          allowed_formats: ["jpg", "png", "jpeg", "svg", "bmp"],
-          public_id: "",
-          folder: "intriobasket-userProfile",
-        },
-        async function (error, result) {
-          if (error) {
-            return error.message;
-          }
-          await __UserModel.findOneAndUpdate(
-            { _id },
-            {
-              avater: result.secure_url,
-            },
-            { new: true }
-          );
-        }
-      );
+      console.log(image);
       return "profile image updated sucessfully";
     } catch (error) {
       return error.message;
@@ -251,5 +312,23 @@ module.exports = class UserController {
     } catch (error) {
       return error.message;
     }
+  }
+  async verifyUser(code, id) {
+    let isverified = await __UserModel.findOne({ _id: id, isVerified: true });
+    if (isverified) {
+      return "account already verified";
+    }
+    let foundUser = await __UserModel.findOne({
+      _id: id,
+      verificationCode: code,
+    });
+
+    if (!foundUser) {
+      return "verification failed";
+    }
+    foundUser.verificationCode = undefined;
+    foundUser.isVerified = true;
+    await foundUser.save();
+    return "success";
   }
 };
