@@ -5,7 +5,6 @@ const userApi = require("./src/route/User");
 const AdminApi = require("./src/route/User/admin");
 const productApi = require("./src/route/Product/");
 const CheckoutApi = require("./src/route/Checkout");
-const ProductModel = require("./src/models/product")
 const cors = require("cors");
 
 const app = express();
@@ -27,7 +26,7 @@ app.use("/user", userApi);
 
 app.use("/product", productApi);
 app.use("/admin", AdminApi);
-// app.use("/checkout", CheckoutApi);
+app.use("/checkout", CheckoutApi);
 mongoose.set('useCreateIndex', true);
 mongoose
   .connect(process.env.DB_URL, {

@@ -70,6 +70,9 @@ module.exports = class AdminController {
     }
   }
   async getUsers(req,res) {
+    if(!req.user){
+      return "login to continue"
+    }
     const admin = await __Admin.findOne({
       _id: req.user._id,
       role: ["superAdmin", "aggregator", "admin"],
