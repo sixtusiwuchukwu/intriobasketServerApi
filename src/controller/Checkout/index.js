@@ -10,7 +10,7 @@ module.exports = class ProductController {
       let cartProducts = [];
       payload["user"] = req.user._id;
       req.body.products.map((item) => {
-        cartProducts.push(item.id);
+        cartProducts.push({quantity:item.quantity,product:item.id});
       });
       payload["products"] = cartProducts;
       delete req.body.products;
@@ -27,6 +27,6 @@ module.exports = class ProductController {
     if (!req.user) {
       return "login to continue";
     }
-    return await __CheckOut.find({ user: req.user._id }).sort({ _id: 1 }).populate("products")
+    return await __CheckOut.find({ user: req.user._id }).sort({ _id: 1 }).populate("products.product")
   }
 };

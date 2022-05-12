@@ -12,14 +12,14 @@ const checkoutSchema = new mongoose.Schema(
     },
     deliveryStatus: {
       type: String,
-      enum:["pending", "delivered","inTransit"],
-      default:"pending"
+      enum: ["pending", "delivered", "inTransit"],
+      default: "pending",
     },
-    deliverySchedule:{
-      type:String,
+    deliverySchedule: {
+      type: String,
     },
-    transactionRefId:{
-      type:String,
+    transactionRefId: {
+      type: String,
     },
     billingAddress: {
       state: { type: String },
@@ -27,8 +27,11 @@ const checkoutSchema = new mongoose.Schema(
     },
     products: [
       {
-        type: mongoose.SchemaTypes.ObjectId,
-        ref: "product",
+        quantity: Number,
+        product: {
+          type: mongoose.SchemaTypes.ObjectId,
+          ref: "product",
+        },
       },
     ],
     user: {
