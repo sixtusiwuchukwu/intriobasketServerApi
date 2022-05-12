@@ -27,6 +27,6 @@ module.exports = class ProductController {
     if (!req.user) {
       return "login to continue";
     }
-    return await __CheckOut.find({ user: req.user._id }).sort({ _id: 1 });
+    return await __CheckOut.find({ user: req.user._id }).sort({ _id: 1 }).populate("products")
   }
 };

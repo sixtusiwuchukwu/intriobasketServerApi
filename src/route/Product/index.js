@@ -90,7 +90,7 @@ router.get("/search/:product", async (req, res) => {
 router.get("/category/:categoryname", async (req, res) => {
   const { categoryname } = req.params;
 
-  let result = await new ProductController().category(categoryname);
+  let result = await new ProductController().getCategory(categoryname);
 
   return res.send(result);
 });

@@ -212,12 +212,12 @@ module.exports = class ProductController {
       return error.message;
     }
   }
-  async getCategory(req, categoryName) {
+  async getCategory(category) {
+
     try {
       let result = await __ProductModel
-        .find({ categoryName })
+        .find({ category:category.toUpperCase()})
         .sort({ _id: -1 });
-
       if (!result) {
         return "category not found";
       }

@@ -37,7 +37,7 @@ const checkoutSchema = new mongoose.Schema(
     },
   },
   {
-    timeStamp: true,
+    timestamps: true,
   }
 );
 
