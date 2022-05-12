@@ -21,7 +21,7 @@ const checkoutSchema = new mongoose.Schema(
     transactionRefId:{
       type:String,
     },
-    address: {
+    billingAddress: {
       state: { type: String },
       location: { type: String },
     },
@@ -41,4 +41,4 @@ const checkoutSchema = new mongoose.Schema(
   }
 );
 
-module.export = mongoose.model("checkout", checkoutSchema);
+module.exports = mongoose.model("checkout", checkoutSchema);

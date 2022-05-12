@@ -10,13 +10,12 @@ module.exports = class ProductController {
       let cartProducts = [];
       payload["user"] = req.user._id;
       req.body.products.map((item) => {
-        cartProducts.push(item._id);
+        cartProducts.push(item.id);
       });
       payload["products"] = cartProducts;
       delete req.body.products;
       payload = { ...payload, ...req.body };
-      console.log(payload);
-      await __CheckOut.create(payload);
+      await __CheckOut.create({...payload})
 
       return "Order placed";
     } catch (err) {

@@ -255,7 +255,7 @@ module.exports = class UserController {
       let newDetails = await __UserModel.findOneAndUpdate(
         { _id },
         {
-          billingAddress: { state: req.body.state, address: req.body.address },
+          billingAddress: { state: req.body.state, location: req.body.location },
         },
         { new: true }
       );
