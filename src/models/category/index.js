@@ -9,5 +9,5 @@ name:{
 }
 },{timestamp:true});
 
-module.export = mongoose.model("category",CategorySchema)
+module.exports = mongoose.model("category",CategorySchema)
 

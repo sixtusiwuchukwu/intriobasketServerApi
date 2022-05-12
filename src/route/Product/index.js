@@ -73,6 +73,11 @@ router.post("/createcategory", isAuth, async (req, res) => {
   return res.send(result);
 });
 
+router.get("/categories",async(req,res)=>{
+  let result = await new ProductController().getCategories()
+res.send(result)
+})
+
 router.get("/search/:product", async (req, res) => {
   const { product } = req.params;
   if (!product | (product === "")) {

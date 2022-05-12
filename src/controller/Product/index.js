@@ -159,9 +159,7 @@ module.exports = class ProductController {
   }
   async getCategories(req) {
     try {
-      if (!req.user) {
-        return "please log in to continue";
-      }
+     
       let result = await __CategoryModel.find({});
       return result;
     } catch (error) {
