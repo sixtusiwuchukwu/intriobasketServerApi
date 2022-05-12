@@ -6,7 +6,6 @@ const AdminApi = require("./src/route/User/admin");
 const productApi = require("./src/route/Product/");
 const CheckoutApi = require("./src/route/Checkout");
 const ProductModel = require("./src/models/product")
-const ProductData = require("./src/food_listings.json")
 const cors = require("cors");
 
 const app = express();
