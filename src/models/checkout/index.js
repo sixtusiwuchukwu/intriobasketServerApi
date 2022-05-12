@@ -15,6 +15,9 @@ const checkoutSchema = new mongoose.Schema(
       enum:["pending", "delivered","inTransit"],
       default:"pending"
     },
+    deliverySchedule:{
+      type:String,
+    },
     transactionRefId:{
       type:String,
     },
