@@ -5,7 +5,7 @@ const __Category = require("../../models/category")
 const generateToken = require("../../utils/generateToken");
 const bcrypt = require("bcrypt");
 
-module.export = class AdminContoller {
+module.exports = class AdminController {
   async getCheckout(req, res) {
     try {
       const { status } = req.query;
@@ -69,7 +69,7 @@ module.export = class AdminContoller {
       });
     }
   }
-  async getUsers() {
+  async getUsers(req,res) {
     const admin = await __Admin.findOne({
       _id: req.user._id,
       role: ["superAdmin", "aggregator", "admin"],
@@ -81,11 +81,11 @@ module.export = class AdminContoller {
       });
     }
     let users = await __User.find({}).sort({ _id: 1 });
-    return res.status(200).send({
+    return {
       status: "OK",
       message: "users fetched",
       payload: users,
-    });
+    };
   }
 
   async login(req, res) {

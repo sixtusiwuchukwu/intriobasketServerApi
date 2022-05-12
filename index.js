@@ -2,8 +2,11 @@ require("dotenv").config();
 const express = require("express");
 const mongoose = require("mongoose");
 const userApi = require("./src/route/User");
+const AdminApi = require("./src/route/User/admin");
 const productApi = require("./src/route/Product/");
 const CheckoutApi = require("./src/route/Checkout");
+const ProductModel = require("./src/models/product")
+const ProductData = require("./src/food_listings.json")
 const cors = require("cors");
 
 const app = express();
@@ -24,16 +27,22 @@ app.use(cors(corsOptions));
 app.use("/user", userApi);
 
 app.use("/product", productApi);
+app.use("/admin", AdminApi);
 // app.use("/checkout", CheckoutApi);
 mongoose.set('useCreateIndex', true);
-
 mongoose
   .connect(process.env.DB_URL, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
     useFindAndModify: false,
   })
-  .then(() => {
+  .then(async () => {
+// try{
+//   await ProductModel.insertMany(ProductData)
+// }catch(e){
+//   console.log(e)
+// }
+   
     setTimeout(() => {
       console.log(`Database is connected to ${process.env.DB_URL}`);
     }, 4000);

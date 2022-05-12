@@ -74,7 +74,7 @@ router.put("/updateuserprofileimage", isAuth, async (req, res) => {
   return res.send(result);
 });
 
-router.post("/updateUserPassword", isAuth, async (req, res) => {
+router.put("/updateUserPassword", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
   }

@@ -15,4 +15,5 @@ const productSchema = new mongoose.Schema(
   }
 );
 
+// module.exports = mongoose.model("Food_Listing", productSchema);
 module.exports = mongoose.model("product", productSchema);

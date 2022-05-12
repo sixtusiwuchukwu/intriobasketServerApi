@@ -3,12 +3,15 @@ const __UserModel = require("./../../models/user");
 // const __CollectionModel = require("./../../models/collection/");
 const __CategoryModel = require("./../../models/category");
 
+
+
 const cloudinary = require("cloudinary").v2;
 
 const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class ProductController {
-  async products() {
+  async products(req) {
+    
     return await __ProductModel.find({});
   }
 

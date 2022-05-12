@@ -1,15 +1,18 @@
 const express = require("express");
+const paginate = require("paginate-middleware")
 
 const router = express.Router();
 const isAuth = require("../../utils/auth/isAuth");
 
 const ProductController = require("../../controller/Product");
 const AdminContoller = require("../../controller/User/admin")
+const productModel = require("../../models/product")
 
-router.get("/", async (req, res) => {
+router.get("/",paginate(productModel), async (req, res) => {
   let products = await new ProductController().products();
   res.send(products);
 });
+
 router.post("/create", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
