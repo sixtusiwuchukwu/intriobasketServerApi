@@ -25,7 +25,6 @@ module.exports = class UserController {
       let alreadyUser = await __UserModel.findOne({ email });
       let code = GenerateCode();
       if (!alreadyUser) {
-        console.log(generateRefCode());
         let newUser = await __UserModel.create({
           fullName,
           email,
@@ -41,18 +40,24 @@ module.exports = class UserController {
             { $push: { referals: newUser._id } }
           );
         }
-        await new EmailUtils("Email Service").mailSend(
-          "Welcome",
-          {
-            fullName: fullName,
-            message: `Welcome to IntrioBasket shopping store , where customer satisfacton is our priority`,
-            verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
-            actionText: "Click To Verify Account",
-          },
-          email,
-          "WELCOME",
-          process.env.MAIL_EMAIL
-        );
+        await EmailService({
+          email: user.email,
+          subject: "CHECKOUT ORDER",
+          copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
+          text: `${user.fullname} just ordered ${names.join('+')} with checkout id: ${uuid}`
+      })
+        // await new EmailUtils("Email Service").mailSend(
+        //   "Welcome",
+        //   {
+        //     fullName: fullName,
+        //     message: `Welcome to IntrioBasket shopping store , where customer satisfacton is our priority`,
+        //     verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
+        //     actionText: "Click To Verify Account",
+        //   },
+        //   email,
+        //   "WELCOME",
+        //   process.env.MAIL_EMAIL
+        // );
         return "user Account created sucessfully";
       }
       return `user with this email ${email} already Exist`;

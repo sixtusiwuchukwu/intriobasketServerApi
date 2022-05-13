@@ -9,9 +9,12 @@ const AdminContoller = require("../../controller/User/admin")
 const productModel = require("../../models/product")
 
 router.get("/",paginate(productModel), async (req, res) => {
-  // let products = await new ProductController().products();
-  // res.send(products);
-  res.json(res.paginatedResult)
+  let products = await new ProductController().products();
+  page = req.params.page ? req.params.page : 1,
+limit= req.params.limit ? req.params.limti : 30
+let result = paginate(products,page,limit)
+  // res.json(res.paginatedResult)
+  res.json(result)
 });
 
 router.post("/create", isAuth, async (req, res) => {

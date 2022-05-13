@@ -1,6 +1,6 @@
 const __ProductModel = require("./../../models/product");
 const __UserModel = require("./../../models/user");
-// const __CollectionModel = require("./../../models/collection/");
+const __Checkout = require("./../../models/checkout");
 const __CategoryModel = require("./../../models/category");
 
 
@@ -192,10 +192,11 @@ module.exports = class ProductController {
     }
   }
 
-  async getHomeCollection() {
+  async getRecentSold() {
     try {
       let data = [];
-      let collections = await __CollectionModel.find({});
+      let collections = await __Checkout.find({}).sort({ _id: -1 })
+      .limit(1);
       
       let there = await Promise.all([data]);
     
