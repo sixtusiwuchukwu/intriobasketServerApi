@@ -40,12 +40,12 @@ module.exports = class UserController {
             { $push: { referals: newUser._id } }
           );
         }
-        await EmailService({
-          email: user.email,
-          subject: "CHECKOUT ORDER",
-          copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
-          text: `${user.fullname} just ordered ${names.join('+')} with checkout id: ${uuid}`
-      })
+      //   await EmailService({
+      //     email: user.email,
+      //     subject: "CHECKOUT ORDER",
+      //     copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
+      //     text: `${user.fullname} just ordered ${names.join('+')} with checkout id: ${uuid}`
+      // })
         // await new EmailUtils("Email Service").mailSend(
         //   "Welcome",
         //   {
