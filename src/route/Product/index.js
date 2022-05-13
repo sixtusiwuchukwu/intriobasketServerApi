@@ -11,7 +11,7 @@ const productModel = require("../../models/product")
 router.get("/",paginate(productModel), async (req, res) => {
   let products = await new ProductController().products();
   page = req.query.page ? req.params.page : 1,
-limit= req.query.limit ? req.params.limti : 30
+limit= req.query.limit ? req.params.limit : 30
 let result = paginate(products,page,limit)
   // res.json(res.paginatedResult)
   res.json(result)
