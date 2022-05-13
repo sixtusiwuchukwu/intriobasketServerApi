@@ -8,7 +8,7 @@ const ProductController = require("../../controller/Product");
 const AdminContoller = require("../../controller/User/admin")
 const productModel = require("../../models/product")
 
-router.get("/",paginate(productModel), async (req, res) => {
+router.get("/",async (req, res) => {
   let products = await new ProductController().products();
   let page = req.query.page ? req.params.page : 1
 let limit= req.query.limit ? req.params.limit : 30
