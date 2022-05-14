@@ -16,7 +16,7 @@ app.use(express.json({limit:"50mb"}));
 
 const corsOptions = {
   // Origin: "http://localhost:3000/",
-  Origin: "http://localhost:5500/",
+  Origin: ["http://localhost:5500/","https://intriobasket-testing.netlify.app/"],
   // optionsSucessStatus: 200,
 };
 
