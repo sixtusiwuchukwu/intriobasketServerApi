@@ -12,20 +12,40 @@ const app = express();
 app.use(express.urlencoded({ extended: true }));
 
 app.use(express.json({limit:"50mb"}));
+app.use(cors())
+// app.use((req, res, next) => {
+//   res.header("Access-Control-Allow-Origin", "*");
+//   // res.header(
+//   //   "Access-Control-Allow-Headers",
+//   //   "Origin, X-Requested-with, Content-Type,Accept, Authorization"
+//   // );
+//   // response.setHeader("Access-Control-Allow-Credentials", "true");
+// response.setHeader("Access-Control-Allow-Methods", "GET,HEAD,OPTIONS,POST,PUT");
+// response.setHeader("Access-Control-Allow-Headers", "Access-Control-Allow-Headers, Origin,Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, token");
+
+//   if (req.method === "OPTIONS") {
+//     res.header(
+//       "Access-Control-Allow-Methods",
+//       "PUT,POST,GET,DELETE,PATCH,UPDATE"
+//     );
+//     return res.status(200).json({});
+//   }
+//   next();
+// });
 
 
-var whitelist = ['https://intriobasket-testing.netlify.app', 'http://localhost:5500']
-var corsOptions = {
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
+// var whitelist = ['https://intriobasket-testing.netlify.app', 'http://localhost:5500']
+// var corsOptions = {
+//   origin: function (origin, callback) {
+//     if (whitelist.indexOf(origin) !== -1) {
+//       callback(null, true)
+//     } else {
+//       callback(new Error('Not allowed by CORS'))
+//     }
+//   }
+// }
 
-app.use(cors(corsOptions));
+// app.use(cors(corsOptions));
 
 app.use("/user", userApi);
 
