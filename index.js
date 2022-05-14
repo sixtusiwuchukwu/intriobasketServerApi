@@ -14,13 +14,18 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json({limit:"50mb"}));
 
 
-const corsOptions = {
-  // Origin:  "http://localhost:5500/"
-  // Origin:""
-  // optionsSucessStatus: 200,
-};
+var whitelist = ['https://intriobasket-testing.netlify.app', 'http://localhost:5500']
+var corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
 
-app.use(cors());
+app.use(cors(corsOptions));
 
 app.use("/user", userApi);
 
