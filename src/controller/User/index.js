@@ -8,7 +8,7 @@ const GenerateToken = require("../../utils/generateToken");
 
 const GenerateCode = require("../../utils/generateVerificationCode");
 
-const EmailUtils = require("../../utils/emailUtils/emailUtiles");
+const sendMail = require("../../utils/emailUtils/email.service");
 var generateRefCode = require("shortid");
 
 module.exports = class UserController {
@@ -40,12 +40,13 @@ module.exports = class UserController {
             { $push: { referals: newUser._id } }
           );
         }
-      //   await EmailService({
-      //     email: user.email,
-      //     subject: "CHECKOUT ORDER",
-      //     copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
-      //     text: `${user.fullname} just ordered ${names.join('+')} with checkout id: ${uuid}`
-      // })
+        await sendMail({
+          email: email,
+          subject: "CHECKOUT ORDER",
+          // copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
+          copy: ["sixtusiwuchukwu22@gmail.com"],
+          text: `${fullName} just ordered somthing with checkout id`
+      })
         // await new EmailUtils("Email Service").mailSend(
         //   "Welcome",
         //   {
