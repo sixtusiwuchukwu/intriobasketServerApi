@@ -190,7 +190,8 @@ module.exports = class ProductController {
 
   async getRecentSold() {
  
-     let data = await __Checkout.find({}).select("products").sort({createdAt:-1})
+     let data = await __Checkout.find({}).select("products").sort({_id:-1})
+    
      const uniqueOrderProducts = new Set();
     data.flatMap(order => order.products).forEach(item => {
       uniqueOrderProducts.add(item.product)
@@ -198,7 +199,7 @@ module.exports = class ProductController {
     const ordersToString = JSON.stringify([...uniqueOrderProducts])    
     let arr = [...new Set(JSON.parse(ordersToString))];
     let split = arr.slice(0,10)
-   return await __ProductModel.find({_id:{$in:split}})
+   return await __ProductModel.find({_id:{$in:split}}).sort({_id:-1})
   
   }
   async getCategory(category) {
