@@ -42,16 +42,14 @@ module.exports = class UserController {
         }
         let mailPayLoad = {
           fullName,
-          message : "welcome to Intriobasket, a market place where rendering quality service to our customers is  pirority",
+          message : "welcome to Intriobasket, a market place where rendering quality service to our customers is  our pirority",
           verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
           actionText: "Click To Verify Account",
         }
         await sendMail({
           email: email,
           subject: "WELCOME",
-          // copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
-          copy: ["lawrence@microboss.org"],
-          // text: `${fullName} just ordered somthing with checkout id`,
+          copy: ["delivery@intriobasket.ng","logistics@intriobasket.ng","accounts@intriobasket.ng","admin@intriobasket.ng"],
           html:WelcomeTemplate(mailPayLoad.fullName,mailPayLoad.message,mailPayLoad.verificationLink,mailPayLoad.actionText)
       })
         // await new EmailUtils("Email Service").mailSend(
