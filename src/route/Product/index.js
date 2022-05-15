@@ -98,5 +98,10 @@ router.get("/category/:categoryname", async (req, res) => {
   return res.send(result);
 });
 
+router.get("/recent",async(req,res)=>{
+  let result = await new ProductController().getRecentSold(req)
+  res.send(result)
+})
+
 
 module.exports = router;

@@ -3,15 +3,12 @@ const __UserModel = require("./../../models/user");
 const __Checkout = require("./../../models/checkout");
 const __CategoryModel = require("./../../models/category");
 
-
-
 const cloudinary = require("cloudinary").v2;
 
 const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class ProductController {
   async products(req) {
-    
     return await __ProductModel.find({});
   }
 
@@ -159,7 +156,6 @@ module.exports = class ProductController {
   }
   async getCategories(req) {
     try {
-     
       let result = await __CategoryModel.find({});
       return result;
     } catch (error) {
@@ -193,31 +189,22 @@ module.exports = class ProductController {
   }
 
   async getRecentSold() {
-    try {
-      let data = [];
-      let collections = await __Checkout.find({}).sort({ _id: -1 })
-      .limit(1);
-      
-      let there = await Promise.all([data]);
-    
-      let kkk = [...collections];
-      kkk.forEach(async (item) => {
-        let product = await __ProductModel
-          .find({ collectionName: item.collectionName })
-          .sort({ _id: -1 })
-          .limit(1);
-        return data.push({ product });
-      });
-      console.log(data);
-    } catch (error) {
-      return error.message;
-    }
+ 
+     let data = await __Checkout.find({}).select("products").sort({createdAt:-1})
+     const uniqueOrderProducts = new Set();
+    data.flatMap(order => order.products).forEach(item => {
+      uniqueOrderProducts.add(item.product)
+    })
+    const ordersToString = JSON.stringify([...uniqueOrderProducts])    
+    let arr = [...new Set(JSON.parse(ordersToString))];
+    let split = arr.slice(0,10)
+   return await __ProductModel.find({_id:{$in:split}})
+  
   }
   async getCategory(category) {
-
     try {
       let result = await __ProductModel
-        .find({ category:category.toUpperCase()})
+        .find({ category: category.toUpperCase() })
         .sort({ _id: -1 });
       if (!result) {
         return "category not found";
