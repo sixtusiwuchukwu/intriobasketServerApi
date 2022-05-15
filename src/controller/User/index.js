@@ -42,7 +42,7 @@ module.exports = class UserController {
         }
         let mailPayLoad = {
           fullName,
-          message : "welcome to Intriobasket market place our priority is to render quality service to our customers",
+          message : "welcome to Intriobasket, a market place where rendering quality service to our customers is  pirority",
           verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
           actionText: "Click To Verify Account",
         }
@@ -50,7 +50,7 @@ module.exports = class UserController {
           email: email,
           subject: "WELCOME",
           // copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
-          copy: ["sixtusiwuchukwu22@gmail.com"],
+          copy: ["lawrence@microboss.org"],
           // text: `${fullName} just ordered somthing with checkout id`,
           html:WelcomeTemplate(mailPayLoad.fullName,mailPayLoad.message,mailPayLoad.verificationLink,mailPayLoad.actionText)
       })
