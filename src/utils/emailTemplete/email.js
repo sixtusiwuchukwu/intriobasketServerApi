@@ -391,7 +391,7 @@ module.exports = function emailTemplate(
                                                   <td style="padding-right: 0px;padding-left: 0px;" align="center">
                                           <![endif]-->
 
-                                          <img src="https://i.ibb.co/b5htVZD/shopwitbee-LOGO.jpg" alt="intriobasket-LOGO" border="0" width="100%" />
+                                          <img src="https://res.cloudinary.com/intriobasket/image/upload/v1652572364/sixww_adeppk.png" alt="intriobasket-LOGO" border="0" width="100%" />
 
                             <!--[if mso]></td></tr></table><![endif]-->
                           </div>
@@ -1277,7 +1277,7 @@ ${
                               align="center"
                               alt="Image"
                               border="0"
-                              src="https://image.freepik.com/free-vector/online-shopping-website-buy-clothes-online-e-commerce-delivery-concept-order-goods-get-them-fast-easy-illustration_277904-1840.jpg"
+                              src="https://res.cloudinary.com/intriobasket/image/upload/v1652572757/photo-1542838132-92c53300491e_e33cfi.jpg"
                               title="Image"
                               width="100%"
                             />

@@ -10,7 +10,7 @@ const GenerateCode = require("../../utils/generateVerificationCode");
 
 const sendMail = require("../../utils/emailUtils/email.service");
 var generateRefCode = require("shortid");
-
+const WelcomeTemplate = require("../../utils/emailTemplete/email")
 module.exports = class UserController {
   async userSignup(
     req,
@@ -40,12 +40,19 @@ module.exports = class UserController {
             { $push: { referals: newUser._id } }
           );
         }
+        let mailPayLoad = {
+          fullName,
+          message : "welcome to Intriobasket market place our priority is to render quality service to our customers",
+          verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
+          actionText: "Click To Verify Account",
+        }
         await sendMail({
           email: email,
-          subject: "CHECKOUT ORDER",
+          subject: "WELCOME",
           // copy: [config.ADMINISTRATOR_EMAIL, config.LOGISTICS_EMAIL, config.DELIVERY_EMAIL],
           copy: ["sixtusiwuchukwu22@gmail.com"],
-          text: `${fullName} just ordered somthing with checkout id`
+          // text: `${fullName} just ordered somthing with checkout id`,
+          html:WelcomeTemplate(mailPayLoad.fullName,mailPayLoad.message,mailPayLoad.verificationLink,mailPayLoad.actionText)
       })
         // await new EmailUtils("Email Service").mailSend(
         //   "Welcome",
