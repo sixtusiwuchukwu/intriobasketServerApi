@@ -199,7 +199,7 @@ module.exports = class ProductController {
     const ordersToString = JSON.stringify([...uniqueOrderProducts])    
     let arr = [...new Set(JSON.parse(ordersToString))];
     let split = arr.slice(0,10)
-   return await __ProductModel.find({_id:{$in:split}}).sort({_id:-1})
+   return await __ProductModel.find({_id:{$in:split}})
   
   }
   async getCategory(category) {
