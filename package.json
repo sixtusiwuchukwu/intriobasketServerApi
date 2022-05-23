@@ -29,7 +29,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "nodemon": "^2.0.7",
     "paginate-middleware": "^1.0.2",
-    "pdfkit": "^0.11.0",
+    "pdfkit-table": "^0.1.98",
     "shortid": "^2.2.16",
     "yup": "^0.32.9"
   }

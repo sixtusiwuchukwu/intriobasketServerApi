@@ -6,7 +6,7 @@ const mg = mailgun({
 });
 
 
-module.exports= ({fullName, email, subject, template, link, title, copy, text,html}) =>{
+module.exports= ({fullName, email, subject, template, link, title, copy, text,html,attachment}) =>{
    
    
     const sendEmail = mg.messages().send({
@@ -17,6 +17,7 @@ module.exports= ({fullName, email, subject, template, link, title, copy, text,ht
         // template: template,
         text: text,
         html:html,
+        attachment:attachment,
         'v:title': title,
         'v:body': fullName,
         'v:link': link

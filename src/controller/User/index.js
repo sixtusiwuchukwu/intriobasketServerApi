@@ -52,18 +52,7 @@ module.exports = class UserController {
           copy: ["delivery@intriobasket.ng","logistics@intriobasket.ng","accounts@intriobasket.ng","admin@intriobasket.ng"],
           html:WelcomeTemplate(mailPayLoad.fullName,mailPayLoad.message,mailPayLoad.verificationLink,mailPayLoad.actionText)
       })
-        // await new EmailUtils("Email Service").mailSend(
-        //   "Welcome",
-        //   {
-        //     fullName: fullName,
-        //     message: `Welcome to IntrioBasket shopping store , where customer satisfacton is our priority`,
-        //     verificationLink: `${req.headers.origin}/verify.html?code=${code}&id=${newUser._id}`,
-        //     actionText: "Click To Verify Account",
-        //   },
-        //   email,
-        //   "WELCOME",
-        //   process.env.MAIL_EMAIL
-        // );
+        
         return "user Account created sucessfully";
       }
       return `user with this email ${email} already Exist`;

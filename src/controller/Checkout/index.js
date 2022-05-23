@@ -1,22 +1,27 @@
 const __CheckOut = require("../../models/checkout");
-
+const GeneratePdf = require("../../utils/pdfGenerator/pdf")
 module.exports = class ProductController {
   async createCheckOut(req) {
     try {
       if (!req.user) {
         return "login to continue";
       }
+     
       let payload = {};
       let cartProducts = [];
+      let pdfData = {email:req.user.email,fullName:req.user.fullName,schedule:req.body.deliverySchedule,location:req.body.billingAddress.location,grandTotal:req.body.totalCost,rows:[]}
       payload["user"] = req.user._id;
       req.body.products.map((item) => {
         cartProducts.push({quantity:item.quantity,product:item.id});
+        pdfData.rows.push([item.productName,item.cost,item.quantity,(item.cost * item.quantity)])
       });
+      pdfData.rows.push([ "", "", "GrandTotal" , req.body.totalCost])
+   
       payload["products"] = cartProducts;
       delete req.body.products;
       payload = { ...payload, ...req.body };
       await __CheckOut.create({...payload})
-
+      GeneratePdf(pdfData)
       return "Order placed";
     } catch (err) {
       console.log(err.message);

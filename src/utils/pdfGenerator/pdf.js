@@ -15,7 +15,7 @@ const GeneratePdf =  (Data) =>{
     
         data = Buffer.concat(buffers);
         await sendMail({
-            email: "sixtusiwuchukwu21@gmail.com",
+            email: Data.email,
             subject: "INVOICE",
             copy: ["delivery@intriobasket.ng","logistics@intriobasket.ng","accounts@intriobasket.ng","admin@intriobasket.ng"],
             html:invoiceTemp(Data.fullName,`your item delivery schedule is <b>${Data.schedule}</b><br/> your item dropOff location is <b>${Data.location}</b> <br/>your checkout invoice is attached to this mail`),
