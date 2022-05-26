@@ -6,12 +6,11 @@ const isAuth = require("../../utils/auth/isAuth");
 
 const ProductController = require("../../controller/Product");
 const AdminContoller = require("../../controller/User/admin")
-const productModel = require("../../models/product")
 
 router.get("/",async (req, res) => {
   let products = await new ProductController().products();
   let page = req.query.page ? req.query.page : 1
-let limit= req.query.limit ? req.query.limit : 30
+let limit= req.query.limit ? req.query.limit : 200
 let result = paginate(products,page,limit)
   // res.json(res.paginatedResult)
   res.json(result)
@@ -46,7 +45,7 @@ router.post("/:id", async (req, res) => {
   return res.send(result);
 });
 router.delete("/:id", async (req, res) => {
-  console.log(req.params)
+ 
   // if (!req.user) {
   //   return res.send("please log in to continue");
   // }
@@ -54,7 +53,7 @@ router.delete("/:id", async (req, res) => {
   if (!id | (id === "")) {
     return res.send("product id must be provided");
   }
-  let result = await new ProductController().deleteProduct(id);
+  let result = await new ProductController().deleteProduct(req,id);
 
   return res.send(result);
 });
@@ -96,6 +95,14 @@ router.get("/category/:categoryname", async (req, res) => {
 
 router.get("/recent",async(req,res)=>{
   let result = await new ProductController().getRecentSold(req)
+  res.send(result)
+})
+router.put("/updatestatus",async(req,res)=>{
+  let result = await new ProductController().updateProductStatus(req)
+  res.send(result)
+})
+router.get("/admin/:query",async(req,res)=>{
+  let result = await new ProductController().Adminproducts(req)
   res.send(result)
 })
 

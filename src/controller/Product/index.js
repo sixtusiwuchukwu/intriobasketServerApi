@@ -9,8 +9,19 @@ const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class ProductController {
   async products(req) {
+  
     return await __ProductModel.find({}).sort({_id:-1});
   }
+
+
+async Adminproducts(req) {
+    let {query} = req.params
+    
+    if(query !== "All"){
+    return await __ProductModel.find({inStock:query}).sort({_id:-1});
+  }
+  return await __ProductModel.find({}).sort({_id:-1});
+}
 
   async createProduct(req) {
     try {
@@ -80,11 +91,11 @@ module.exports = class ProductController {
       if (!notfoundItem) {
         return "item not found";
       }
-      // await __ProductModel.findByIdAndRemove(productId, (err, deleted) => {
-      //   if (err) {
-      //     return err.message;
-      //   }
-      // });
+      await __ProductModel.findByIdAndRemove(productId, (err, deleted) => {
+        if (err) {
+          return err.message;
+        }
+      });
       return "product deleted sucessfully";
     } catch (error) {
       return error.message;
@@ -234,4 +245,12 @@ module.exports = class ProductController {
       return error.message;
     }
   }
+  async updateProductStatus(req){
+    // if (!req.user) {
+    //   return "please log in to continue";
+    // }
+    await __ProductModel.findOneAndUpdate({_id:req.body.productId},{inStock:req.body.inStock})
+    return "updated"
+  }
+  
 };
