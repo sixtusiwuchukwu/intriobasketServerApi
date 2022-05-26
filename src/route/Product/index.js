@@ -21,6 +21,7 @@ router.post("/create", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");
   }
+ 
   const {
     category,
     description,
@@ -30,16 +31,10 @@ router.post("/create", isAuth, async (req, res) => {
   } = req.body;
   if ( !productImage | !productName |  !category |  !cost | !description ) {
     return res.send(
-      "productimage,productname,catergory,collection,price,description must be provided"
+      "category, description, cost, productImage,productName must be provided"
     );
   }
-  let result = await new ProductController().createProduct(
-    productImage,
-    productName,
-    category,
-    cost,
-    description
-  );
+  let result = await new ProductController().createProduct(req);
   return res.send(result);
 });
 router.post("/:id", async (req, res) => {
@@ -50,10 +45,11 @@ router.post("/:id", async (req, res) => {
   let result = new ProductController().product(id);
   return res.send(result);
 });
-router.delete("/:id", isAuth, async (req, res) => {
-  if (!req.user) {
-    return res.send("please log in to continue");
-  }
+router.delete("/:id", async (req, res) => {
+  console.log(req.params)
+  // if (!req.user) {
+  //   return res.send("please log in to continue");
+  // }
   const { id } = req.params;
   if (!id | (id === "")) {
     return res.send("product id must be provided");

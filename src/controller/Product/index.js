@@ -9,28 +9,19 @@ const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class ProductController {
   async products(req) {
-    return await __ProductModel.find({});
+    return await __ProductModel.find({}).sort({_id:-1});
   }
 
-  async createProduct(
-    req,
-    productimage,
-    productName,
-    categoryName,
-    collectionName,
-    preOrderPrice,
-    sellingPrice,
-    description
-  ) {
+  async createProduct(req) {
     try {
       const { _id } = req.user;
-      let foundUser = await __UserModel.findById(_id);
-      if (!foundUser) {
-        return "user not found";
-      }
-      if (foundUser.isAdmin === false) {
-        return "you are not authorised to create a new product";
-      }
+      // const admin = await __Admin.findOne({
+      //   _id: req.user._id,
+      //   role: ["superAdmin", "aggregator", "admin"],
+      // });
+      // if (!admin) {
+      //   return "you are not authorization failed";
+      // }
 
       cloudinary.config({
         cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -39,30 +30,25 @@ module.exports = class ProductController {
       });
 
       await cloudinary.uploader.upload(
-        productimage,
+        req.body.productImage,
         {
           width: 512,
           height: 512,
           crop: "scale",
           allowed_formats: ["jpg", "png", "jpeg", "svg", "bmp"],
           public_id: "",
-          folder: "shopwitbee-products",
+          folder: "intriobasket-products",
         },
         async function (error, result) {
           if (error) {
             return error.message;
           }
           await __ProductModel.create({
-            productimage: result.secure_url,
-            productName,
-            categoryName,
-            collectionName,
-            preOrderPrice,
-            sellingPrice,
-            description,
+           ...req.body,productimage: result.secure_url,
           });
         }
       );
+     
       return "sucessfully created a new product";
     } catch (error) {
       return error;
@@ -87,18 +73,18 @@ module.exports = class ProductController {
   }
   async deleteProduct(req, productId) {
     try {
-      if (!req.user) {
-        return "please log in to continue";
-      }
+      // if (!req.user) {
+      //   return "please log in to continue";
+      // }
       let notfoundItem = await __ProductModel.findById(productId);
       if (!notfoundItem) {
         return "item not found";
       }
-      await __ProductModel.findByIdAndRemove(productId, (err, deleted) => {
-        if (err) {
-          return err.message;
-        }
-      });
+      // await __ProductModel.findByIdAndRemove(productId, (err, deleted) => {
+      //   if (err) {
+      //     return err.message;
+      //   }
+      // });
       return "product deleted sucessfully";
     } catch (error) {
       return error.message;

@@ -3,6 +3,9 @@ const __Checkout = require("../../models/checkout");
 const __User = require("../../models/user/");
 const __Category = require("../../models/category");
 const generateToken = require("../../utils/generateToken");
+const generatePassword = require("../../utils/generateadminPassword");
+const sendMail = require("../../utils/emailUtils/email.service");
+const WelcomeTemplate = require("../../utils/emailTemplete/email")
 const bcrypt = require("bcrypt");
 
 module.exports = class AdminController {
@@ -105,31 +108,23 @@ module.exports = class AdminController {
       let admin = await __Admin.findOne({ email });
       //Check for User's Email
       if (!admin)
-        return res
-          .status(404)
-          .send({ status: "ERROR", message: "Email not found" });
+        return ({ status: "ERROR", message: "Email not found" });
 
       let compare = await bcrypt.compare(password, admin.password);
       //Compare user's password and stored password
       if (!compare)
-        return res
-          .status(403)
-          .send({ status: "ERROR", message: "Incorrect Email or Password" });
+        return ({ status: "ERROR", message: "Incorrect Email or Password" });
       else {
-        let token = generateToken(admin);
+        let token = await generateToken(admin);
 
-        res.cookie("adminToken", token, {
-          maxAge: new Date(Date.now() + 172800000),
-          http0nly: true,
-        });
-        return res.status(200).send({
+        return ({
           status: "OK",
           message: "Log in Successful",
-          payload: { ...admin, password: undefined, token },
+          payload: { user:{...admin._doc,password: undefined,},  token },
         });
       }
     } catch (error) {
-      return res.status(500).send({
+      return ({
         status: "ERROR",
         payload: error.message,
       });
@@ -199,5 +194,38 @@ module.exports = class AdminController {
       status: "OK",
       message: "success",
     });
+  }
+  async createAdmin(req,res){
+     
+      try {
+        let alreadyUser = await __Admin.findOne({ email:req.body.email });
+        let password = generatePassword();
+        if (!alreadyUser) {
+          await __Admin.create({
+            ...req.body,
+            password:password ,
+          });
+         
+          let mailPayLoad = {
+            fullName:req.body.fullName,
+            message : `You have been granted ${req.body.role} access welcome to Intriobasket, a market place where rendering quality service to our customers is  our pirority your login password is <b>${password}</b>`,
+            
+          }
+         let ok =  await sendMail({
+            email: "sixtusiwuchukwu21@gmail.com",
+            // email: req.body.email,
+            subject: `${req.body.role.toUpperCase() } ACCESS`,
+            copy: ["admin@intriobasket.ng"],
+            html:WelcomeTemplate(mailPayLoad.fullName,mailPayLoad.message,mailPayLoad.actionText)
+        })
+        console.log(ok)
+          
+          return "user Account created sucessfully";
+        }
+        return `user with this email ${req.body.email} already Exist`;
+      } catch (error) {
+        return error.message;
+      }
+    
   }
 };

@@ -14,5 +14,15 @@ router.get("/checkouts",isAuth,async(req,res)=>{
 const result = await new AdminController().getCheckout(req,res)
 res.send(result)
 })
+router.post("/login",async(req,res)=>{
+
+const result = await new AdminController().login(req,res)
+res.send(result)
+})
+router.post("/newadmin",async(req,res)=>{
+
+const result = await new AdminController().createAdmin(req,res)
+res.send(result)
+})
 
 module.exports = router;
