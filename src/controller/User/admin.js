@@ -1,6 +1,7 @@
 const __Admin = require("../../models/user/admin");
 const __Checkout = require("../../models/checkout");
 const __User = require("../../models/user/");
+const __product = require("../../models/product")
 const __Category = require("../../models/category");
 const generateToken = require("../../utils/generateToken");
 const generatePassword = require("../../utils/generateadminPassword");
@@ -100,6 +101,27 @@ module.exports = class AdminController {
       payload: users,
     };
   }
+    async getAdmins(req, res) {
+    // if(!req.user){
+    //   return "login to continue"
+    // }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return res.status(401).send({
+    //     status: "ERROR",
+    //     message: "wrong priviledge",
+    //   });
+    // }
+    let admins = await __Admin.find({}).sort({ _id: -1 });
+    return {
+      status: "OK",
+      message: "admin fetched",
+      payload: admins,
+    };
+  }
 
   async login(req, res) {
     try {
@@ -196,7 +218,10 @@ module.exports = class AdminController {
     });
   }
   async createAdmin(req,res){
-     
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: ["superAdmin"],
+    // });
       try {
         let alreadyUser = await __Admin.findOne({ email:req.body.email });
         let password = generatePassword();
@@ -212,7 +237,7 @@ module.exports = class AdminController {
             
           }
          let ok =  await sendMail({
-            email: "sixtusiwuchukwu21@gmail.com",
+            email: req.body.email,
             // email: req.body.email,
             subject: `${req.body.role.toUpperCase() } ACCESS`,
             copy: ["admin@intriobasket.ng"],
@@ -228,4 +253,29 @@ module.exports = class AdminController {
       }
     
   }
+  async getStatistics(req,res){
+let stat = {}
+
+let productsCount = await __product.find({}).countDocument()
+let ordersCount = await __Checkout.find({}).countDocumnet()
+let userCount = await __User.find({}).countDocument()
+let categoryCount = await __Category.find({}).countDocument()
+}
+async updateRole(req,res){
+  // if(!req.user){
+    //   return "login to continue"
+    // }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return res.status(401).send({
+    //     status: "ERROR",
+    //     message: "wrong priviledge",
+    //   });
+    // }
+    await __Admin.findOneAndUpdate({_id:req.params.adminId},{role:req.body.role})
+    return "updated"
+}
 };
