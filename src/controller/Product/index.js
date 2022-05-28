@@ -9,19 +9,17 @@ const EmailUtils = require("../../utils/emailUtils/emailUtiles");
 
 module.exports = class ProductController {
   async products(req) {
-  
-    return await __ProductModel.find({}).sort({_id:-1});
+    return await __ProductModel.find({}).sort({ _id: -1 });
   }
 
+  async Adminproducts(req) {
+    let { query } = req.params;
 
-async Adminproducts(req) {
-    let {query} = req.params
-    
-    if(query !== "All"){
-    return await __ProductModel.find({inStock:query}).sort({_id:-1});
+    if (query !== "All") {
+      return await __ProductModel.find({ inStock: query }).sort({ _id: -1 });
+    }
+    return await __ProductModel.find({}).sort({ _id: -1 });
   }
-  return await __ProductModel.find({}).sort({_id:-1});
-}
 
   async createProduct(req) {
     try {
@@ -55,25 +53,22 @@ async Adminproducts(req) {
             return error.message;
           }
           await __ProductModel.create({
-           ...req.body,productimage: result.secure_url,
+            ...req.body,
+            productimage: result.secure_url,
           });
         }
       );
-     
+
       return "sucessfully created a new product";
     } catch (error) {
       return error;
     }
   }
 
-  async product(req, productId) {
+  async Getproduct(req,productId) {
     try {
-      if (!req.user) {
-        return "please log in to continue";
-      }
-
-      let foundProduct = await __ProductModel.findById({ _id: productId });
-
+      let foundProduct = await __ProductModel.findById(productId);
+  
       if (!foundProduct) {
         return "product not found";
       }
@@ -186,18 +181,18 @@ async Adminproducts(req) {
   }
 
   async getRecentSold() {
- 
-     let data = await __Checkout.find({}).select("products").sort({_id:-1})
-    
-     const uniqueOrderProducts = new Set();
-    data.flatMap(order => order.products).forEach(item => {
-      uniqueOrderProducts.add(item.product)
-    })
-    const ordersToString = JSON.stringify([...uniqueOrderProducts])    
+    let data = await __Checkout.find({}).select("products").sort({ _id: -1 });
+
+    const uniqueOrderProducts = new Set();
+    data
+      .flatMap((order) => order.products)
+      .forEach((item) => {
+        uniqueOrderProducts.add(item.product);
+      });
+    const ordersToString = JSON.stringify([...uniqueOrderProducts]);
     let arr = [...new Set(JSON.parse(ordersToString))];
-    let split = arr.slice(0,10)
-   return await __ProductModel.find({_id:{$in:split}})
-  
+    let split = arr.slice(0, 10);
+    return await __ProductModel.find({ _id: { $in: split } });
   }
   async getCategory(category) {
     try {
@@ -245,12 +240,24 @@ async Adminproducts(req) {
       return error.message;
     }
   }
-  async updateProductStatus(req){
+  async updateProductStatus(req) {
     // if (!req.user) {
     //   return "please log in to continue";
     // }
-    await __ProductModel.findOneAndUpdate({_id:req.body.productId},{inStock:req.body.inStock})
-    return "updated"
+    await __ProductModel.findOneAndUpdate(
+      { _id: req.body.productId },
+      { inStock: req.body.inStock }
+    );
+    return "updated";
   }
-  
+  async Updateproduct(req,id) {
+    // if (!req.user) {
+    //   return "please log in to continue";
+    // }
+    await __ProductModel.findOneAndUpdate(
+      { _id:id },
+      { ...req.body }
+    );
+    return "sucessfully updated product";
+  }
 };

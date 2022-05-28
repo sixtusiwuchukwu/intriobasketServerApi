@@ -5,6 +5,7 @@ const userApi = require("./src/route/User");
 const AdminApi = require("./src/route/User/admin");
 const productApi = require("./src/route/Product/");
 const CheckoutApi = require("./src/route/Checkout");
+const __User = require("./src/models/user")
 const cors = require("cors");
 
 const app = express();
@@ -60,11 +61,9 @@ mongoose
     useFindAndModify: false,
   })
   .then(async () => {
-// try{
-//   await ProductModel.insertMany(ProductData)
-// }catch(e){
-//   console.log(e)
-// }
+
+
+
    
     setTimeout(() => {
       console.log(`Database is connected to ${process.env.DB_URL}`);

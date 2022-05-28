@@ -127,7 +127,7 @@ module.exports = class AdminController {
     try {
       const { email, password } = req.body;
 
-      let admin = await __Admin.findOne({ email });
+      let admin = await __Admin.findOne({ email,isActive:"true" });
       //Check for User's Email
       if (!admin)
         return ({ status: "ERROR", message: "Email not found" });
@@ -277,5 +277,93 @@ async updateRole(req,res){
     // }
     await __Admin.findOneAndUpdate({_id:req.params.adminId},{role:req.body.role})
     return "updated"
+}
+async UpdateAccountStatus(req,res){
+  // if(!req.user){
+    //   return "login to continue"
+    // }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return res.status(401).send({
+    //     status: "ERROR",
+    //     message: "wrong priviledge",
+    //   });
+    // }
+    await __Admin.findOneAndUpdate({_id:req.params.adminId},{isActive:req.body.status})
+    return "updated"
+}async UpdateUserAccountStatus(req,res){
+  // if(!req.user){
+    //   return "login to continue"
+    // }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return res.status(401).send({
+    //     status: "ERROR",
+    //     message: "wrong priviledge",
+    //   });
+    // }
+    await __User.findOneAndUpdate({_id:req.params.userId},{isActive:req.body.status})
+    return "updated"
+}
+async deleteAccount(req,res){
+  // if(!req.user){
+    //   return "login to continue"
+    // }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return res.status(401).send({
+    //     status: "ERROR",
+    //     message: "wrong priviledge",
+    //   });
+    // }
+    await __Admin.findOneAndDelete({_id:req.params.adminId})
+    return "deleted"
+}
+async searchAdmin(admin) {
+  try {
+    let result = await __Admin.find({ $or: [
+      {fullName: { $regex: admin, $options: "i" }},
+      {email:{ $regex: admin, $options: "i" }}
+    ]});
+    return result;
+  } catch (error) {
+    return error.message;
+  }
+}
+async searchCustomer(customer) {
+  try {
+    let result = await __User.find({ $or: [
+      {fullName: { $regex: customer, $options: "i" }},
+      {email:{ $regex: customer, $options: "i" }}
+    ]});
+    return result;
+  } catch (error) {
+    return error.message;
+  }
+}
+async FilterAdminByRole(req) {
+  let {query} = req.params
+  
+  if(query !== "All"){
+  return await __Admin.find({role:query}).sort({_id:-1});
+}
+return await __Admin.find({}).sort({_id:-1});
+}
+async customerFilter(req) {
+  let {query} = req.params
+  
+  if(query !== "All"){
+  return await __User.find({isActive:query}).sort({_id:-1});
+}
+return await __User.find({}).sort({_id:-1});
 }
 };
