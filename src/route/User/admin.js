@@ -9,7 +9,7 @@ router.get("/users",isAuth,async(req,res)=>{
 const result = await new AdminController().getUsers(req,res)
 res.send(result)
 })
-router.get("/searchcustomer/:customer", async (req, res) => {
+router.get("/searchcustomer/:customer",isAuth, async (req, res) => {
     const { customer } = req.params;
     if (!customer | (customer === "")) {
       return res.send("search query must contain a value");
@@ -18,7 +18,7 @@ router.get("/searchcustomer/:customer", async (req, res) => {
   
     return res.send(result);
   });
-  router.get("/search/:admin", async (req, res) => {
+  router.get("/search/:admin", isAuth,async (req, res) => {
     const { admin } = req.params;
     if (!admin | (admin === "")) {
       return res.send("search query must contain a value");
@@ -27,12 +27,12 @@ router.get("/searchcustomer/:customer", async (req, res) => {
   
     return res.send(result);
   });
-  router.get("/filter/:query", async (req, res) => {
+  router.get("/filter/:query",isAuth, async (req, res) => {
     const { query } = req.params;
     if (!query | (query === "")) {
       return res.send("search query must contain a value");
     }
-    let result = await new AdminController().FilterAdminByRole(req,res);
+    let result = await new AdminController().FilterAdminByRole(req);
   
     return res.send(result);
   }); 
@@ -63,6 +63,17 @@ router.put("/updateuseraccountstatus/:userId",isAuth,async(req,res)=>{
 const result = await new AdminController().UpdateUserAccountStatus(req,res)
 res.send(result)
 })
+router.put("/updatepassword",isAuth,async(req,res)=>{
+  if (!req.user) {
+    return res.send("please log in to continue");
+  }
+  const { oldPassword, newPassword } = req.body;
+  if (!oldPassword | !newPassword) {
+    return res.send("oldPassword and newPassword is not provided");
+  }
+const result = await new AdminController().updatePassword(req,oldPassword,newPassword)
+res.send(result)
+})
 router.delete("/deleteaccount/:adminId",isAuth,async(req,res)=>{
 const result = await new AdminController().deleteAccount(req,res)
 res.send(result)
@@ -74,7 +85,7 @@ res.send(result)
 })
 router.post("/login",async(req,res)=>{
 
-const result = await new AdminController().login(req,res)
+const result = await new AdminController().login(req)
 res.send(result)
 })
 router.post("/newadmin",async(req,res)=>{
@@ -82,7 +93,7 @@ router.post("/newadmin",async(req,res)=>{
 const result = await new AdminController().createAdmin(req,res)
 res.send(result)
 })
-router.post("/statistics",async(req,res)=>{
+router.get("/statistics",async(req,res)=>{
 
 const result = await new AdminController().getStatistics(req,res)
 res.send(result)

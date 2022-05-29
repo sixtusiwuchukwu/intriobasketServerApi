@@ -12,9 +12,13 @@ router.get("/",isAuth,async(req,res)=>{
 let result = await new checkOutController().getUserCheckOut(req)
 res.send(result)
 })
-router.put("/update",isAuth,async(req,res)=>{
+router.put("/updatestatus/:id",isAuth,async(req,res)=>{
 let result = await new checkOutController().updateCheckOutStatus(req)
 res.send(result)
 })
+// router.get("/filterbystatus/:status",isAuth,async(req,res)=>{
+// let result = await new checkOutController().filterCheckoutByStatus(req)
+// res.send(result)
+// })
 
 module.exports = router

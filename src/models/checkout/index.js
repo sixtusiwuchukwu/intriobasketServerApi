@@ -12,7 +12,7 @@ const checkoutSchema = new mongoose.Schema(
     },
     deliveryStatus: {
       type: String,
-      enum: ["pending", "delivered", "inTransit"],
+      enum: ["pending", "delivered", "inTransit","confirmed"],
       default: "pending",
     },
     deliverySchedule: {

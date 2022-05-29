@@ -41,4 +41,14 @@ module.exports = class ProductController {
       await __CheckOut.findOneAndUpdate({_id:req.params.id},{deliveryStatus:req.body.status})
       return "updated"
   }
+  //  async filterCheckoutByStatus(req){
+  //   if (!req.user) {
+  //       return "login to continue";
+  //     }
+  //     if(req.params.status === "All"){
+  //     return  await __CheckOut.find({}).sort({_id:-1})
+  //     }else{
+  //       return await __CheckOut.find({deliveryStatus:req.params.status}).sort({_id:-1})
+  //     }
+  // }
 };
