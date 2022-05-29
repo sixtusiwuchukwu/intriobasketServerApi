@@ -2,6 +2,7 @@ const __ProductModel = require("./../../models/product");
 const __UserModel = require("./../../models/user");
 const __Checkout = require("./../../models/checkout");
 const __CategoryModel = require("./../../models/category");
+const Mongoose = require("mongoose")
 
 const cloudinary = require("cloudinary").v2;
 
@@ -192,7 +193,8 @@ module.exports = class ProductController {
     const ordersToString = JSON.stringify([...uniqueOrderProducts]);
     let arr = [...new Set(JSON.parse(ordersToString))];
     let split = arr.slice(0, 10);
-    return await __ProductModel.find({ _id: { $in: split } });
+    let ids = split.flatMap((id)=>Mongoose.Types.ObjectId(id))
+    return await __ProductModel.find({ _id: { $in: ids } });
   }
   async getCategory(category) {
     try {
