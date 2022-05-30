@@ -183,7 +183,6 @@ module.exports = class ProductController {
 
   async getRecentSold() {
     let data = await __Checkout.find({}).select("products").sort({ _id: -1 });
-
     const uniqueOrderProducts = new Set();
     data
       .flatMap((order) => order.products)
@@ -194,6 +193,7 @@ module.exports = class ProductController {
     let arr = [...new Set(JSON.parse(ordersToString))];
     let split = arr.slice(0, 10);
     let ids = split.flatMap((id)=>Mongoose.Types.ObjectId(id))
+   
     return await __ProductModel.find({ _id: { $in: ids } });
   }
   async getCategory(category) {

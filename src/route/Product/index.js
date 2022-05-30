@@ -37,15 +37,15 @@ router.post("/create", isAuth, async (req, res) => {
   return res.send(result);
 });
 
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id | (id === "")) {
-    return res.send("product id must be provided");
-  }
-  let result = await new ProductController().Getproduct(req,id);
+// router.get("/:id", async (req, res) => {
+//   const { id } = req.params;
+//   if (!id | (id === "")) {
+//     return res.send("product id must be provided");
+//   }
+//   let result = await new ProductController().Getproduct(req,id);
   
-  return res.send(result);
-});
+//   return res.send(result);
+// });
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
@@ -69,6 +69,7 @@ router.delete("/:id", async (req, res) => {
 
   return res.send(result);
 });
+
 router.post("/createcategory", isAuth, async (req, res) => {
   if (!req.user) {
     return res.send("please log in to continue");

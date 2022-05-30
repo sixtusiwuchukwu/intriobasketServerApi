@@ -61,10 +61,6 @@ mongoose
     useFindAndModify: false,
   })
   .then(async () => {
-
-
-
-   
     setTimeout(() => {
       console.log(`Database is connected to ${process.env.DB_URL}`);
     }, 4000);
@@ -80,7 +76,7 @@ mongoose
 
 
 
-const PORT = process.env.PORT || 2090;
+const PORT = process.env.PORT || 2080;
 
 app.listen(PORT, () => {
   console.log(`Intriobasket server is connected on port ${PORT}`);
