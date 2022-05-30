@@ -14,10 +14,10 @@ const CartSchema = new mongoose.Schema({
     required: true,
   },
   productId: {
-    type: mongoose.types.ObjectId,
+    type: mongoose.Types.ObjectId,
     required: true,
   },  userId: {
-    type: mongoose.types.ObjectId,
+    type: mongoose.Types.ObjectId,
     required: true,
   },
   category: {

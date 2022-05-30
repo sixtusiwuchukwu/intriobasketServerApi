@@ -1,20 +1,25 @@
 const mongoose = require("mongoose");
 
-const __Cart = require("../../models/cart");
+const __Cart = require("../../models/cart/cart");
 
 module.exports = class CartController {
   async getUserCart(req) {
     if (!req.user) {
       return "login to continue";
     }
-    let userCart = await __Cart.find({user:req.user._id})
+    let userCart = await __Cart.find({userId:req.user._id})
     return userCart;
   }
-    async addToCart(req) {
+    async AddToCart(req) {
     if (!req.user) {
       return "login to continue";
     }
-     await __Cart.create({...req.body,user:req.user._id})
+  try{
+     await __Cart.create({...req.body,userId:req.user._id})
     return "added to cart";
+  }catch(err){
+      console.log(err)
+      return ("internal server error")
   }
+}
 };
