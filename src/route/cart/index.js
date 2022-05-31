@@ -17,5 +17,12 @@ router.get("/",isAuth,async (req, res) => {
    }
    let response = await new CartController().AddToCart(req)
   return res.send(response)
+  }); 
+   router.delete("/remove/:productId",isAuth,async (req, res) => {
+   if(!req.user){
+      return res.send("login to Continue")
+   }
+   let response = await new CartController().deleteSingleUserCart(req)
+  return res.send(response)
   });
   module.exports = router
