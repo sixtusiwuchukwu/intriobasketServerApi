@@ -39,7 +39,6 @@ module.exports = class CartController {
         userId: req.user._id,
         productId: req.params.productId,
       });
-     
       return "deleted";
     } catch (err) {
       console.log(err);
@@ -48,6 +47,21 @@ module.exports = class CartController {
   }
 
   async addOffLine(req){
-    
+    try{
+
+      for (const cartItem of req.body.offline) {
+        let alreadyAdded = await __Cart.findOne({ userId: req.user._id,productId: cartItem._id, });
+        if (alreadyAdded) {
+          return await __Cart.findOneAndUpdate({ userId: req.user._id, productId: cartItem._id },{ quantity: alreadyAdded.quantity + 1 });
+        }
+        await __Cart.create({cartItem, userId: req.user._id})
+      }
+      const response = await __Cart.find({userId: req.user._id});
+      return response
+
+  } catch (err) {
+    console.log(err)
+    return ("internal server error")
+  }
   }
 };
