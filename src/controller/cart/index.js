@@ -3,10 +3,10 @@ const mongoose = require("mongoose");
 const __Cart = require("../../models/cart/cart");
 
 module.exports = class CartController {
-  async getUserCart(req) {
-    if (!req.user) {
-      return "login to continue";
-    }
+    async getUserCart(req) {
+        if (!req.user) {
+            return "login to continue";
+        }
     let userCart = await __Cart.find({ userId: req.user._id });
     return userCart;
   }
@@ -48,7 +48,6 @@ module.exports = class CartController {
 
   async addOffLine(req){
     try{
-
       for (const cartItem of req.body.offline) {
         let alreadyAdded = await __Cart.findOne({ userId: req.user._id,productId: cartItem._id, });
         if (alreadyAdded) {
@@ -64,4 +63,6 @@ module.exports = class CartController {
     return ("internal server error")
   }
   }
+
+   
 };
