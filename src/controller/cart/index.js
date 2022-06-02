@@ -46,4 +46,8 @@ module.exports = class CartController {
       return "internal server";
     }
   }
+
+  async addOffLine(req){
+    
+  }
 };
