@@ -53,13 +53,13 @@ module.exports = class CartController {
                     await __Cart.findOneAndUpdate({
                         userId: req.user._id,
                         productId: cartItem.productId
-                    }, {quantity: alreadyAdded.quantity + 1});
+                    }, {quantity: alreadyAdded.quantity + cartItem.quantity});
                 } else {
                     return await __Cart.create({...cartItem, userId: req.user._id})
                 }
             }
-            const response = await __Cart.find({userId: req.user._id});
-            return response
+
+            return "success"
 
         } catch (err) {
             console.log(err)
