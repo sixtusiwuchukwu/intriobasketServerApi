@@ -1,5 +1,6 @@
 const __CheckOut = require("../../models/checkout");
 const GeneratePdf = require("../../utils/pdfGenerator/pdf")
+const __Cart = require("../../models/cart/cart")
 module.exports = class ProductController {
   async createCheckOut(req) {
     try {
@@ -22,6 +23,7 @@ module.exports = class ProductController {
       payload = { ...payload, ...req.body };
       await __CheckOut.create({...payload})
       GeneratePdf(pdfData)
+      await __Cart.findAndDelete({userId:req.user._id})
       return "Order placed";
     } catch (err) {
       console.log(err.message);
