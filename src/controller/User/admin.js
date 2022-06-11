@@ -201,13 +201,13 @@ module.exports = class AdminController {
     });
   }
   async createAdmin(req, res) {
-    const admin = await __Admin.findOne({
-      _id: req.user._id,
-      role: "superAdmin",
-    });
-    if (!admin) {
-      return "wrong priviledge";
-    }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: "superAdmin",
+    // });
+    // if (!admin) {
+    //   return "wrong priviledge";
+    // }
     try {
       let alreadyUser = await __Admin.findOne({ email: req.body.email });
       let password = generatePassword();

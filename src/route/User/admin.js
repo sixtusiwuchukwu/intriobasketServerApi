@@ -88,12 +88,12 @@ router.post("/login",async(req,res)=>{
 const result = await new AdminController().login(req)
 res.send(result)
 })
-router.post("/newadmin",async(req,res)=>{
+router.post("/newadmin",isAuth,async(req,res)=>{
 
 const result = await new AdminController().createAdmin(req,res)
 res.send(result)
 })
-router.get("/statistics",async(req,res)=>{
+router.get("/statistics",isAuth,async(req,res)=>{
 
 const result = await new AdminController().getStatistics(req,res)
 res.send(result)
