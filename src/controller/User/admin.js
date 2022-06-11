@@ -260,13 +260,13 @@ module.exports = class AdminController {
     if (!req.user) {
       return "login to continue";
     }
-    const admin = await __Admin.findOne({
-      _id: req.user._id,
-      role: { $in: ["superAdmin"] },
-    });
-    if (!admin) {
-      return "wrong priviledge";
-    }
+    // const admin = await __Admin.findOne({
+    //   _id: req.user._id,
+    //   role: { $in: ["superAdmin"] },
+    // });
+    // if (!admin) {
+    //   return "wrong priviledge";
+    // }
     await __Admin.findOneAndUpdate(
       { _id: req.params.adminId },
       { role: req.body.role }
