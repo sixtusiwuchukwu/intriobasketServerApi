@@ -201,13 +201,13 @@ module.exports = class AdminController {
     });
   }
   async createAdmin(req, res) {
-    // const admin = await __Admin.findOne({
-    //   _id: req.user._id,
-    //   role: "superAdmin",
-    // });
-    // if (!admin) {
-    //   return "wrong priviledge";
-    // }
+    const admin = await __Admin.findOne({
+      _id: req.user._id,
+      role: "superAdmin",
+    });
+    if (!admin) {
+      return "wrong priviledge";
+    }
     try {
       let alreadyUser = await __Admin.findOne({ email: req.body.email });
       let password = generatePassword();
@@ -260,13 +260,13 @@ module.exports = class AdminController {
     if (!req.user) {
       return "login to continue";
     }
-    // const admin = await __Admin.findOne({
-    //   _id: req.user._id,
-    //   role: { $in: ["superAdmin"] },
-    // });
-    // if (!admin) {
-    //   return "wrong priviledge";
-    // }
+    const admin = await __Admin.findOne({
+      _id: req.user._id,
+      role: { $in: ["superAdmin"] },
+    });
+    if (!admin) {
+      return "wrong priviledge";
+    }
     await __Admin.findOneAndUpdate(
       { _id: req.params.adminId },
       { role: req.body.role }
@@ -291,19 +291,19 @@ module.exports = class AdminController {
     return "updated";
   }
   async UpdateUserAccountStatus(req, res) {
-    // if(!req.user){
-    //   return "login to continue"
-    // }
-    // const admin = await __Admin.findOne({
-    //   _id: req.user._id,
-    //   role: "superAdmin",
-    // });
-    // if (!admin) {
-    //   return res.status(401).send({
-    //     status: "ERROR",
-    //     message: "wrong priviledge",
-    //   });
-    // }
+    if(!req.user){
+      return "login to continue"
+    }
+    const admin = await __Admin.findOne({
+      _id: req.user._id,
+      role: "superAdmin",
+    });
+    if (!admin) {
+      return res.status(401).send({
+        status: "ERROR",
+        message: "wrong priviledge",
+      });
+    }
     await __User.findOneAndUpdate(
       { _id: req.params.userId },
       { isActive: req.body.status }
