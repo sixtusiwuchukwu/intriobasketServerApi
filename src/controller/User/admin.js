@@ -324,7 +324,7 @@ module.exports = class AdminController {
     await __Admin.findOneAndDelete({ _id: req.params.adminId });
     return "deleted";
   }
-  async searchAdmin(admin) {
+  async searchAdmin(admin,req) {
     const foundAdmin = await __Admin.findOne({
       _id: req.user._id,
       role: { $in: ["superAdmin"] },

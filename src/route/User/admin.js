@@ -23,7 +23,7 @@ router.get("/searchcustomer/:customer",isAuth, async (req, res) => {
     if (!admin | (admin === "")) {
       return res.send("search query must contain a value");
     }
-    let result = await new AdminController().searchAdmin(admin);
+    let result = await new AdminController().searchAdmin(admin,req);
   
     return res.send(result);
   });
