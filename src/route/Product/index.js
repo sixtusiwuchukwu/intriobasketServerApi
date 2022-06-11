@@ -36,16 +36,16 @@ router.post("/create", isAuth, async (req, res) => {
   let result = await new ProductController().createProduct(req);
   return res.send(result);
 });
-
-// router.get("/:id", async (req, res) => {
-//   const { id } = req.params;
-//   if (!id | (id === "")) {
-//     return res.send("product id must be provided");
-//   }
-//   let result = await new ProductController().Getproduct(req,id);
+//this endpoint was a promblem
+router.get("/:id", async (req, res) => {
+  const { id } = req.params;
+  if (!id | (id === "")) {
+    return res.send("product id must be provided");
+  }
+  let result = await new ProductController().Getproduct(req,id);
   
-//   return res.send(result);
-// });
+  return res.send(result);
+});
 
 router.put("/:id", async (req, res) => {
   const { id } = req.params;
