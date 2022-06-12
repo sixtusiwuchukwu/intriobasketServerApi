@@ -243,9 +243,9 @@ module.exports = class ProductController {
     }
   }
   async updateProductStatus(req) {
-    // if (!req.user) {
-    //   return "please log in to continue";
-    // }
+    if (!req.user) {
+      return "please log in to continue";
+    }
     await __ProductModel.findOneAndUpdate(
       { _id: req.body.productId },
       { inStock: req.body.inStock }
@@ -253,9 +253,9 @@ module.exports = class ProductController {
     return "updated";
   }
   async Updateproduct(req,id) {
-    // if (!req.user) {
-    //   return "please log in to continue";
-    // }
+    if (!req.user) {
+      return "please log in to continue";
+    }
     await __ProductModel.findOneAndUpdate(
       { _id:id },
       { ...req.body }

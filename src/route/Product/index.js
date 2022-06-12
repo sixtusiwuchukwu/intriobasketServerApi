@@ -100,7 +100,7 @@ router.get("/recent",async(req,res)=>{
   let result = await new ProductController().getRecentSold(req)
   res.send(result)
 })
-router.put("/updatestatus",async(req,res)=>{
+router.put("/updatestatus",isAuth,async(req,res)=>{
   let result = await new ProductController().updateProductStatus(req)
   res.send(result)
 })
