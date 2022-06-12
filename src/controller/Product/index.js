@@ -243,6 +243,7 @@ module.exports = class ProductController {
     }
   }
   async updateProductStatus(req) {
+    try{
     if (!req.user) {
       return "please log in to continue";
     }
@@ -251,6 +252,9 @@ module.exports = class ProductController {
       { inStock: req.body.inStock }
     );
     return "updated";
+    }catch (e) {
+      console.log(e)
+    }
   }
   async Updateproduct(req,id) {
     if (!req.user) {
