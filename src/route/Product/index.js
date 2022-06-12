@@ -110,15 +110,15 @@ router.get("/admin/:query",async(req,res)=>{
 })
 
 //this endpoint was a promblem
-router.get("/:id", async (req, res) => {
-  const { id } = req.params;
-  if (!id | (id === "")) {
-    return res.send("product id must be provided");
-  }
-  let result = await new ProductController().Getproduct(req,id);
-
-  return res.send(result);
-});
+// router.get("/:id", async (req, res) => {
+//   const { id } = req.params;
+//   if (!id | (id === "")) {
+//     return res.send("product id must be provided");
+//   }
+//   let result = await new ProductController().Getproduct(req,id);
+//
+//   return res.send(result);
+// });
 
 
 
