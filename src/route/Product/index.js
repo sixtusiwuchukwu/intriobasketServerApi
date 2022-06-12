@@ -37,7 +37,7 @@ router.post("/create", isAuth, async (req, res) => {
   return res.send(result);
 });
 
-router.put("/:id", async (req, res) => {
+router.put("/:id", isAuth,async (req, res) => {
   const { id } = req.params;
   if (!id | (id === "")) {
     return res.send("product id must be provided");
@@ -46,11 +46,11 @@ router.put("/:id", async (req, res) => {
   return res.send(result);
 });
 
-router.delete("/:id", async (req, res) => {
+router.delete("/:id", isAuth,async (req, res) => {
  
-  // if (!req.user) {
-  //   return res.send("please log in to continue");
-  // }
+  if (!req.user) {
+    return res.send("please log in to continue");
+  }
   const { id } = req.params;
   if (!id | (id === "")) {
     return res.send("product id must be provided");
@@ -104,7 +104,7 @@ router.put("/updatestatus",isAuth,async(req,res)=>{
   let result = await new ProductController().updateProductStatus(req)
   res.send(result)
 })
-router.get("/admin/:query",async(req,res)=>{
+router.get("/admin/:query",isAuth,async(req,res)=>{
   let result = await new ProductController().Adminproducts(req)
   res.send(result)
 })
