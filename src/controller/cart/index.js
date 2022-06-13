@@ -67,5 +67,20 @@ module.exports = class CartController {
         }
     }
 
+    async increaseQuantity(req){
+        if(!req.user){
+            return "login to continue"
+        }
+       let isFound = await __Cart.findOne({userId:req.user._id,productId:req.params.Id})
+        await __Cart.findOneAndUpdate({userId:req.user._id,productId:req.params.Id},{quantity:isFound.quantity + 1})
+    }
+    async decreaseQuantity(req){
+        if(!req.user){
+            return "login to continue"
+        }
+       let isFound = await __Cart.findOne({userId:req.user._id,productId:req.params.Id})
+        await __Cart.findOneAndUpdate({userId:req.user._id,productId:req.params.Id},{quantity:isFound.quantity - 1})
+    }
+
 
 };
