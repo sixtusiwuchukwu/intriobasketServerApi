@@ -50,6 +50,7 @@ const userSchema = new mongoose.Schema(
     billingAddress: {
       state: { type: String, trim: true },
       location: { type: String, trim: true },
+      street: { type: String, trim: true },
     },
     isVerified: {
       type: Boolean,

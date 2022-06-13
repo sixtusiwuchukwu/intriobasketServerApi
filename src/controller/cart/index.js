@@ -37,7 +37,7 @@ module.exports = class CartController {
 
     async deleteSingleUserCart(req) {
         try {
-            await __Cart.findOneAndDelete({userId: req.user._id, productId: req.params.productId});
+                await __Cart.findOneAndDelete({userId: req.user._id, productId: req.params.productId});
             return "deleted";
         } catch (err) {
             console.log(err);
