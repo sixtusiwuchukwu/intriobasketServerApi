@@ -72,6 +72,7 @@ module.exports = class CartController {
             return "login to continue"
         }
        let isFound = await __Cart.findOne({userId:req.user._id,productId:req.params.Id})
+
         await __Cart.findOneAndUpdate({userId:req.user._id,productId:req.params.Id},{quantity:isFound.quantity + 1})
     return "updated"
     }
@@ -80,7 +81,9 @@ module.exports = class CartController {
             return "login to continue"
         }
        let isFound = await __Cart.findOne({userId:req.user._id,productId:req.params.Id})
-        await __Cart.findOneAndUpdate({userId:req.user._id,productId:req.params.Id},{quantity:isFound.quantity - 1})
+        console.log(isFound)
+        let noZeros = isFound.quantity === 1 ? 1 : isFound.quantity - 1
+        await __Cart.findOneAndUpdate({userId:req.user._id,productId:req.params.Id},{quantity:noZeros})
         return "updated"
     }
 

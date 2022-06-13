@@ -25,14 +25,14 @@ router.get("/",isAuth,async (req, res) => {
    let response = await new CartController().addOffLine(req)
   return res.send(response)
   }); 
-  router.put("/increasequantity/:id",isAuth,async (req, res) => {
+  router.put("/increasequantity/:Id",isAuth,async (req, res) => {
    if(!req.user){
       return res.send("login to Continue")
    }
    let response = await new CartController().increaseQuantity(req)
   return res.send(response)
   });
-  router.put("/decreasequantity/:id",isAuth,async (req, res) => {
+  router.put("/decreasequantity/:Id",isAuth,async (req, res) => {
    if(!req.user){
       return res.send("login to Continue")
    }
