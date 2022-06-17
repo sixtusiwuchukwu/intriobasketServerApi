@@ -36,6 +36,12 @@ module.exports = class ProductController {
     }
     return await __CheckOut.find({ user: req.user._id }).sort({ _id: -1 }).populate("products.product")
   }
+  async SingleCheckOut(req) {
+    if (!req.user) {
+      return "login to continue";
+    }
+    return await __CheckOut.find({ _id:req.params.Id}).populate("products.product")
+  }
   async updateCheckOutStatus(req){
     if (!req.user) {
         return "login to continue";

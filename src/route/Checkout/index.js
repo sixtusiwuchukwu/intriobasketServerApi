@@ -16,7 +16,11 @@ router.put("/updatestatus/:id",isAuth,async(req,res)=>{
 let result = await new checkOutController().updateCheckOutStatus(req)
 res.send(result)
 })
-// router.get("/filterbystatus/:status",isAuth,async(req,res)=>{
+router.get("/single/:Id",isAuth,async(req,res)=>{
+let result = await new checkOutController().SingleCheckOut(req)
+res.send(result)
+})
+// / router.get("/filterbystatus/:status",isAuth,async(req,res)=>{
 // let result = await new checkOutController().filterCheckoutByStatus(req)
 // res.send(result)
 // })
